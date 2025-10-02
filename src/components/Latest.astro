@@ -1,0 +1,16 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+//import blogs from '../data/blog-data.json'
+const  blogs:CollectionEntry<"blogs">[] = await getCollection('blogs');
+import ArticleItem from './ArticleItem.astro'
+---
+
+<h2 class="text-[#111418] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Latest Articles</h2>
+{
+  
+    blogs.map(blog =>(
+       
+        <ArticleItem post={blog} />
+    ))
+}

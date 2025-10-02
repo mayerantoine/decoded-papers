@@ -1,0 +1,16 @@
+---
+import { render } from "astro:content"
+import createSlug from "../lib/createSlug"
+const {post} = Astro.props
+
+---
+
+
+<div class="flex gap-4 bg-white px-4 py-3 justify-between">
+  <div class="flex flex-1 flex-col justify-center">
+    <p class="text-[#111418] text-base font-medium leading-normal"><a href={`/blog/${createSlug(post.data.title)}/`} class="hover:underline">{post.data.title}</a></p>
+    <p class="text-[#637588] text-sm font-normal leading-normal">Published on {post.data.published_date}</p>
+    <p class="text-[#637588] text-sm font-normal leading-normal">{post.data.description}</p>
+  </div>
+  <div class="shrink-0"><a href={`/blog/${createSlug(post.data.title)}/`} class="text-base font-medium leading-normal hover:underline">Read More</a></div>
+</div>

@@ -1,0 +1,56 @@
+---
+
+import { getCollection , render} from "astro:content";
+import Prose from '../../components/Prose.astro';
+import ArticleToc from "../../components/ArticleToc.astro";
+import createSlug from '../../lib/createSlug.ts'
+import type { CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+export async function getStaticPaths() {
+
+    const blogs =  await getCollection("blogs")
+    
+    return blogs.map( (blog) => ({
+        params: {slug: createSlug(blog.data.title)},
+        props: {blog}
+
+    }))
+}
+
+interface Props {
+    blog: CollectionEntry<"blogs">
+}
+
+const {blog} = Astro.props
+const {Content } = await render(blog)
+---
+
+<Layout>
+    <div class="gap-6 px-6 flex flex-col flex-1 justify-center py-5">
+        <!-- Title Section at the top -->
+        <div class="layout-content-container max-w-[1400px] mx-auto w-full pt-6">
+            <h2 class="text-[#111418] tracking-light text-[28px] font-bold leading-tight px-4 text-left pb-3 pt-5">{blog.data.title}</h2>
+        </div>
+        
+        <!-- Three Column Layout: Date | Content | TOC -->
+        <div class="flex flex-row justify-start max-w-[1400px] mx-auto w-full">
+            <!-- Left Column: Date -->
+            <div class="w-56 flex-shrink-0">
+                <p class="text-[#637588] text-sm font-normal leading-normal pb-3 pt-2 px-4 sticky top-5">Published on {blog.data.published_date}</p>
+            </div>
+            
+            <!-- Center Column: Content -->
+            <div class="layout-content-container flex flex-col flex-1 min-w-0 px-4">
+                <Prose>
+                    <Content/>
+                </Prose>
+            </div>
+            
+            <!-- Right Column: TOC -->
+            <div class="ml-4">
+                <ArticleToc toc ={blog.data.toc} title={blog.data.title}/>
+            </div>
+        </div>
+    </div>
+   
+</Layout>
