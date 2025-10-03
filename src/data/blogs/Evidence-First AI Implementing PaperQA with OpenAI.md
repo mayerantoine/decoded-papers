@@ -3,6 +3,7 @@ title: Evidence-First AI - Implementing PaperQA with OpenAI Agents SDK
 description : From Paper to Practice - Reproducing Agentic RAG with OpenAI's Agent SDK.
 published_date: "2025-10-01"
 toc: ["PaperQA","Our Implementation","Orchestrator: Master Agent","Search Tool","Gather Tool","Answer Tool","Conclusion and Discussion"]
+githubURL: "https://github.com/mayerantoine/openai-agent-paperqa"
 ---
 
 Traditional RAG (Retrieval-Augmented Generation) systems follow a simple pattern: retrieve relevant documents, then generate an answer. But what if we could make this process more intelligent, more human-like? What if our AI could reason about what to search for, critically evaluate evidence, and iterate on its approach?

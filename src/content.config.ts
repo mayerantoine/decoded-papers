@@ -19,7 +19,8 @@ const blogs = defineCollection({
     title: z.string(), 
     description: z.string(), 
     published_date: z.string(),
-    toc: z.array(z.string())
+    toc: z.array(z.string()),
+    githubURL: z.string().optional()
   })
 });
 

@@ -3,6 +3,7 @@ title: Why TypeScript is a Game-Changer for React Devs
 description: Explore why TypeScript is a game-changer for React development, how it improves code quality, and how to integrate it into your workflow.
 published_date: "2025-04-01"
 toc: ["The Problem with JavaScript in React", "Key Benefits of TypeScript in React","Should You Use TypeScript?"]
+githubURL: ""
 ---
 
 If you're a React developer and haven't tried TypeScript yet, you're missing out! TypeScript supercharges JavaScript by adding **static typing**, making it a game-changer for modern React development.

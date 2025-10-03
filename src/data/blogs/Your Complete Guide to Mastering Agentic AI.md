@@ -3,6 +3,7 @@ title: Your Complete Guide to Mastering Agentic AI A Learning Framework
 description : A framework orgnizing my thoughts and notes around AI Agents
 published_date: "2025-09-01"
 toc: ["Why This Framework?","The Learning Path","Why This Order Matters","Start Your Journey"]
+githubURL: ""
 ---
 
 The AI landscape is shifting rapidly from simple chatbots to sophisticated agents that can reason, plan, and act autonomously. If you're looking to understand this transformation, you need a structured approach. Here's a comprehensive learning framework I've developed for mastering Agentic AI.

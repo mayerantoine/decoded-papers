@@ -37,6 +37,10 @@ const {Content } = await render(blog)
             <!-- Left Column: Date -->
             <div class="w-56 flex-shrink-0">
                 <p class="text-[#637588] text-sm font-normal leading-normal pb-3 pt-2 px-4 sticky top-5">Published on {blog.data.published_date}</p>
+                {blog.data.githubURL !== "" &&  
+                    <p class="text-[#637588] text-sm font-normal leading-normal pb-3 pt-2 px-4 sticky top-5"><a href={blog.data.githubURL} class="hover:underline">View Code</a></p>
+                }
+               
             </div>
             
             <!-- Center Column: Content -->

@@ -4,6 +4,7 @@ description : Summarizing an understanding of practical ML and AI engineering.
 published_date : "2025-07-01"
 toc: ["The ML Engineer's Toolkit","The ML Engineering Lifecycle",
 "Key Components for ML Engineering Success"]
+githubURL: ""
 ---
 
 Machine Learning (ML) has revolutionized industries across the globe, but transforming ML models from research concepts into reliable production systems remains challenging. This is where ML Engineering steps in - a discipline dedicated to bridging the gap between theoretical ML and practical, business-driving applications.
