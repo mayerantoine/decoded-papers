@@ -20,7 +20,9 @@ The authors developed PaperQA, an agent that performs information retrieval acro
 
 We follow the same framework in our implementation with some simplifications while maintaining the core innovation. We plan to improve our agent over time. Our approach uses a retrieve-gather-response methodology with multi-agent RAG where agents function as tools.
 
-We developed one main orchestrator agent with three tools: a search_tool for retrieval using semantic search, a gather_tool (an agent used as a tool) to gather evidence, and an answer tool to review evidence and summarize the final response.
+We developed one main orchestrator agent with three tools: a search_tool for retrieval using semantic search, a gather_tool (an agent used as a tool) to gather evidence, and an answer tool to review evidence and summarize the final response.**In fact, this design pattern behaves as a single-agent, because there's no handoff or conversation; other agents are used as tools**.
+
+![Image alt text](./images/design_pattern.png)
 
 #### Orchestrator: Master Agent
 
@@ -90,6 +92,46 @@ Unlike the approach in the paper, we implemented direct semantic search on a Chr
 
 The gather tool uses the EvidenceAgent in parallel to summarize each chunk returned by the retrieval and score the chunk from 1-10 based on its relevance to the question. The returned chunks are then sorted by score, and only high-quality chunks scoring above the relevance_cutoff parameter are added to the Context library. The number of accumulated evidence pieces and best evidence text are then returned to the master agent context for decision-making—whether to continue searching or to answer the question.
 
+The diagram below attempts to illustrate the inner workings of the agent. While the design pattern above doesn't reveal much about the implementation, this diagram demonstrates the complexity of the gather_tool using the evidence agent and the importance of the evidence library shared across all tools and agents.
+
+![architecture](./images/architecture.png)
+
+The code below implements the gather_tool, which collects and evaluates evidence from retrieved documents.
+
+```python
+    @function_tool
+    async def gather_evidence(state: "RunContextWrapper[SessionState]", question: str)-> str:
+        """Use this tool to gather evidence to help answer the question."""
+        print(f"🟢 [Gather] Gathering evidence for question: {question}")
+        chunks = state.context.search_results
+        # Process evidence in parallel
+        tasks = [
+            asyncio.create_task(evidence_summary(item['title'] + item['content'],question)) 
+            for item in chunks
+        ]
+        results = await asyncio.gather(*tasks)
+        print(f"🟢 [Gather] Finished gathering evidence for question: {question}")
+        # Filter high-quality evidence
+        top_evidence_context = [
+            (result.score, result.relevant_information_summary) 
+            for result in results 
+            if result.score >= self.config.relevance_cutoff
+        ]
+        count_top_evidence = len(top_evidence_context)
+        # Update session state
+        state.context.evidence_library.extend(top_evidence_context)
+        state.context.status['Evidence'] = len(state.context.evidence_library)
+        state.context.status['Relevant'] = len(state.context.evidence_library)
+        best_evidence = "\n".join([evidence[1] for evidence in state.contextevidence_library])
+        print(state.context.status)
+        
+        return f"🟢 [Gather] Found and added {count_top_evidence}pieces of evidencerelevant to the question. Best evidences: {best_evidence}."
+    
+    return gather_evidence
+```
+
+The evidence agent is fundamentally a prompt with structured output.
+
 ```python
     @property
     def evidence_agent(self):
@@ -152,6 +194,10 @@ The answer tool receives the top evidence from the master agent if it has decide
 This implementation is only a proof of concept to understand Agentic RAG functionality and key features of the OpenAI SDK. It does not include the full breadth of features found in PaperQA.
 
 However, it still combines several advanced RAG techniques such as self-correction, adaptability, reranking, query reformulation, query expansion, and rewriting using the LLM's reasoning capability and self-evaluation.
+
+The main loop idea of the **search-gather-response** framework in an agentic way, where the agent autonomously decides when to search, gather more evidence, and answer, is illustrated in the workflow below.
+
+![architecture](./images/workflow.png)
 
 This first throwaway prototype serves as a baseline that we can build upon and improve. For instance, developing our own evaluation dataset to assess the Agent using tools such as RAGA would be a good next step. Continuing to follow the work on FutureHouse in PaperQA2 or similar products such as AI2Scholar [https://allenai.org/blog/ai2-scholarqa](https://allenai.org/blog/ai2-scholarqa) would help develop ideas and intuition to include in our own agentic RAG approach.
 
