@@ -1,4 +1,3 @@
-# Decoded papers
+# DecodedPapers 📄
 
-A personal blog about AI/ML papers and essential AI engineering concepts.
-
+A personal blog about AI/ML papers and books.
