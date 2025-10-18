@@ -1,18 +1,22 @@
 ---
+import { Image } from "astro:assets";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Layout from "./Layout.astro";
 import { SITE } from "@/config";
+import profileImage from "@/assets/images/profile.jpg";
 
 export interface Props {
   frontmatter: {
     title: string;
     description?: string;
+    showProfileImage?: boolean;
   };
 }
 
 const { frontmatter } = Astro.props;
+const showProfile = frontmatter.showProfileImage ?? false;
 ---
 
 <Layout title={`${frontmatter.title} | ${SITE.title}`}>
@@ -21,6 +25,30 @@ const { frontmatter } = Astro.props;
   <main id="main-content">
     <section id="about" class="app-prose mb-28 max-w-app prose-img:border-0">
       <h1 class="text-2xl tracking-wider sm:text-3xl">{frontmatter.title}</h1>
+      {showProfile && (
+        <div class="float-right ml-6 mb-6 mt-2 hidden sm:block">
+          <Image
+            src={profileImage}
+            alt="Profile picture"
+            width={180}
+            height={180}
+            class="rounded-full shadow-lg ring-2 ring-accent/20"
+            loading="eager"
+          />
+        </div>
+      )}
+      {showProfile && (
+        <div class="mb-6 flex justify-center sm:hidden">
+          <Image
+            src={profileImage}
+            alt="Profile picture"
+            width={150}
+            height={150}
+            class="rounded-full shadow-lg ring-2 ring-accent/20"
+            loading="eager"
+          />
+        </div>
+      )}
       <slot />
     </section>
   </main>

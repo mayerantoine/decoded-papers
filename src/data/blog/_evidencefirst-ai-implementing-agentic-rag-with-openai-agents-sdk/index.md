@@ -2,9 +2,12 @@
 author: Mayer Antoine
 pubDatetime: 2025-10-04
 modDatetime: 2025-10-05
-title: Evidence-First AI - Implementing PaperQA with OpenAI Agents SDK
+title: Evidence-First AI - Implementing Agentic RAG with OpenAI Agents SDK
+slug: evidencefirst-ai-implementing-agentic-rag-with-openai-agents-sdk
 tags:
-  - docs
+  - Retrieval-augmented generation(RAG)
+  - Agent
+  - OpenAI Agents SDK
 description: From Paper to Practice - Reproducing Agentic RAG with OpenAI's Agent SDK.
 ---
 
@@ -14,7 +17,7 @@ description: From Paper to Practice - Reproducing Agentic RAG with OpenAI's Agen
 
 Traditional RAG (Retrieval-Augmented Generation) systems follow a simple pattern: retrieve relevant documents, then generate an answer. But what if we could make this process more intelligent, more human-like? What if our AI could reason about what to search for, critically evaluate evidence, and iterate on its approach?
 
-This is exactly what the paper "**PaperQA: Retrieval-Augmented Generative Agent for Scientific Research**" explores. Rather than treating RAG as a linear pipeline, the authors propose an **agentic approach** where AI agents can reason, plan, and use tools dynamically to answer complex questions.
+This is exactly what the paper [**PaperQA: Retrieval-Augmented Generative Agent for Scientific Research**](https://arxiv.org/abs/2312.07559) explores. Rather than treating RAG as a linear pipeline, the authors propose an **agentic approach** where AI agents can reason, plan, and use tools dynamically to answer complex questions.
 
 In this post, we'll show how we reproduced these concepts using OpenAI's Agent SDK, building a multi-agent system that can search through research papers and provide evidence-based answers about public health topics.
 
@@ -28,7 +31,7 @@ We follow the same framework in our implementation with some simplifications whi
 
 We developed one main orchestrator agent with three tools: a search_tool for retrieval using semantic search, a gather_tool (an agent used as a tool) to gather evidence, and an answer tool to review evidence and summarize the final response.**In fact, this design pattern behaves as a single-agent, because there's no handoff or conversation; other agents are used as tools**.
 
-![Image alt text](./images/design_pattern.png)
+![Design pattern](./images/design_pattern.png)
 
 ### Orchestrator: Master Agent
 
@@ -100,7 +103,7 @@ The gather tool uses the EvidenceAgent in parallel to summarize each chunk retur
 
 The diagram below attempts to illustrate the inner workings of the agent. While the design pattern above doesn't reveal much about the implementation, this diagram demonstrates the complexity of the gather_tool using the evidence agent and the importance of the evidence library shared across all tools and agents.
 
-![architecture](./images/architecture.png)
+![architecture](./images/architecturev2.png)
 
 The code below implements the gather_tool, which collects and evaluates evidence from retrieved documents.
 
@@ -200,10 +203,6 @@ The answer tool receives the top evidence from the master agent if it has decide
 This implementation is only a proof of concept to understand Agentic RAG functionality and key features of the OpenAI SDK. It does not include the full breadth of features found in PaperQA.
 
 However, it still combines several advanced RAG techniques such as self-correction, adaptability, reranking, query reformulation, query expansion, and rewriting using the LLM's reasoning capability and self-evaluation.
-
-The main loop idea of the **search-gather-response** framework in an agentic way, where the agent autonomously decides when to search, gather more evidence, and answer, is illustrated in the workflow below.
-
-![architecture](./images/workflow.png)
 
 This first throwaway prototype serves as a baseline that we can build upon and improve. For instance, developing our own evaluation dataset to assess the Agent using tools such as RAGA would be a good next step. Continuing to follow the work on FutureHouse in PaperQA2 or similar products such as AI2Scholar [https://allenai.org/blog/ai2-scholarqa](https://allenai.org/blog/ai2-scholarqa) would help develop ideas and intuition to include in our own agentic RAG approach.
 

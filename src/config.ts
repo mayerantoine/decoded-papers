@@ -1,5 +1,5 @@
 export const SITE = {
-  website: "https://decodedpapers.blog", // replace this with your deployed domain
+  website: "https://decodedpapers.com", // replace this with your deployed domain
   author: "Mayer Antoine",
   profile: "",
   desc: "A personal blog about AI/ML papers and books.",
