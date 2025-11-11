@@ -3,6 +3,16 @@ layout: ../layouts/AboutLayout.astro
 title: "About"
 description: "Learn about DecodedPapers and Mayer Antoine - bridging the gap between AI/ML research and practical implementation through code and tutorials."
 showProfileImage: true
+badges:
+  - image: "badge1"
+    alt: "Microsoft Certified: Azure AI Engineer Associate"
+    url: "https://www.credly.com/earner/earned/badge/92145e4d-f853-4e35-9065-1d9602ec1034"
+  - image: "badge2"
+    alt: "Microsoft Certified: Azure Data Scientist Associate"
+    url: "https://www.credly.com/earner/earned/badge/3aff2463-4f78-45cd-8ddb-c0cec1c3c0cf"
+  - image: "badge3"
+    alt: "Microsoft Certified: Azure Fundamentals"
+    url: "https://www.credly.com/earner/earned/badge/a5b43990-e36d-4149-ada3-a93c603fba06"
 ---
 
 ## About DecodedPapers
@@ -30,7 +40,7 @@ I'm a data scientist, public health informaticist, and computer scientist fascin
 
 * 📚 I advance AI/ML capabilities across CDC through technical consultation, problem-solving, and creating learning materials that bridge research and real-world application.
 
-* 🎓 Graduate of the Public Health Informatics Fellowship Program (PHIFP) and Georgia Tech's MS in Computer Science.
+* 🎓 Graduate of the Public Health Informatics Fellowship Program (PHIFP) and Georgia Tech's MSc in Computer Science.
 
 * 💡 I love projects at the intersection of AI/ML research and healthcare impact.
 
@@ -54,3 +64,5 @@ I'm best reached via [LinkedIn](https://www.linkedin.com/in/mayerantoine/). Alwa
 For more of my work, check out my [GitHub](https://github.com/mayerantoine).
 
 Based in Atlanta, Georgia
+
+### 🏆 Certifications

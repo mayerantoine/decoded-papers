@@ -6,17 +6,32 @@ import Breadcrumb from "@/components/Breadcrumb.astro";
 import Layout from "./Layout.astro";
 import { SITE } from "@/config";
 import profileImage from "@/assets/images/profile.jpg";
+import badge1 from "@/assets/images/badge1.png";
+import badge2 from "@/assets/images/badge2.png";
+import badge3 from "@/assets/images/badge3.png";
 
 export interface Props {
   frontmatter: {
     title: string;
     description?: string;
     showProfileImage?: boolean;
+    badges?: Array<{
+      image: string;
+      alt: string;
+      url: string;
+    }>;
   };
 }
 
 const { frontmatter } = Astro.props;
 const showProfile = frontmatter.showProfileImage ?? false;
+
+// Map badge images
+const badgeImages = {
+  badge1: badge1,
+  badge2: badge2,
+  badge3: badge3,
+};
 ---
 
 <Layout title={`${frontmatter.title} | ${SITE.title}`}>
@@ -50,6 +65,31 @@ const showProfile = frontmatter.showProfileImage ?? false;
         </div>
       )}
       <slot />
+
+      {frontmatter.badges && frontmatter.badges.length > 0 && (
+        <div id="certifications-badges" class="not-prose mt-8">
+          <div class="flex flex-wrap gap-4 justify-start items-center">
+            {frontmatter.badges.map((badge) => (
+              <a
+                href={badge.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="transition-transform hover:scale-105 focus:scale-105 focus:outline-none focus:ring-2 focus:ring-accent/50 rounded"
+                aria-label={badge.alt}
+              >
+                <Image
+                  src={badgeImages[badge.image as keyof typeof badgeImages]}
+                  alt={badge.alt}
+                  width={120}
+                  height={120}
+                  class="rounded shadow-md hover:shadow-lg transition-shadow"
+                  loading="lazy"
+                />
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   </main>
   <Footer />
