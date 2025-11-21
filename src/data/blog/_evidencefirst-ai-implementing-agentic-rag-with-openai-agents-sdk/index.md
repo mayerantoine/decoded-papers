@@ -19,7 +19,7 @@ Traditional RAG (Retrieval-Augmented Generation) systems follow a simple pattern
 
 This is exactly what the paper [**PaperQA: Retrieval-Augmented Generative Agent for Scientific Research**](https://arxiv.org/abs/2312.07559) explores. Rather than treating RAG as a linear pipeline, the authors propose an **agentic approach** where AI agents can reason, plan, and use tools dynamically to answer complex questions.
 
-In this post, I'll show how I reproduced these concepts using OpenAI's Agent SDK, building an agentic system that can search through research papers and provide evidence-based answers about public health topics.
+In this post, I'll show how I reproduced these concepts by building an agentic system that can search through research papers and provide evidence-based answers about public health topics.
 
 ## PaperQA
 
@@ -27,7 +27,7 @@ The authors developed PaperQA, an agent that retrieves information from full-tex
 
 In traditional RAG, retrieval happens only once. If the retrieved passages are irrelevant or incomplete, the generated answer will likely be incorrect. PaperQA enables an LLM to decide what to search, how many times to search, what content to retrieve, and how to judge relevance—all before answering.
 
-However, the authors used their in-house [agent framework](https://github.com/future-house/aviary) to implement PaperQA. In this post, I'll show how to use the popular OpenAI Agent SDK to implement the PaperQA. With this approach, you can export the same idea to other agent frameworks like LangGraph or Strand Agents.
+However, the authors used their in-house [agent framework](https://github.com/future-house/aviary) to implement PaperQA. In this post, I'll show how to implement a PaperQA-like agent using the popular OpenAI Agents SDK. This approach allows you to adapt the same concepts to other agent frameworks like LangGraph or Strand Agents.
 
 
 ## My Implementation
@@ -36,7 +36,7 @@ My implementation follows the same concepts from the paper with some simplificat
 
 My approach consists of one main orchestrator agent with three tools: a search tool for retrieval using semantic search, a gather tool to collect evidence, and an answer tool to review all gathered evidence and summarize the final response. The orchestrator agent follows the [ReAct pattern](https://arxiv.org/abs/2210.03629)—reasoning and acting in a loop: it evaluates which tool to call, calls the tool, evaluates the output, and repeats. This design pattern behaves as a single-agent system because there's no handoff or conversation between agents. However, the complexity lies in how the tools themselves use other agents to achieve their goals and central context memory to share information, as I'll explain below.
 
-![Design pattern](./images/design_pattern.png)
+![Design pattern](./images/design_pattern2.png)
 
 ### Orchestrator: Master Agent
 
@@ -105,7 +105,7 @@ def create_search_tool(self):
 
 The gather tool uses the EvidenceAgent in parallel to summarize each chunk returned by the retrieval and score the chunk from 1-10 based on its relevance to the question. The returned chunks are then sorted by score, and only chunks scoring above the relevance_cutoff parameter are added to the Context library. The number of accumulated evidence pieces and best evidence text are then returned to the master agent context for decision-making—whether to continue searching or to answer the question.
 
-The diagram below attempts to illustrate the inner workings of the tool, it demonstrates the complexity of the gather tool using the evidence agent and the importance of the evidence library shared across all tools and agents.
+The diagram below illustrates the inner workings of the agentic RAG, it demonstrates the complexity of the gather tool using the evidence agent and the importance of the evidence library shared across all tools and agents.
 
 ![architecture](./images/architecturev2.png)
 
@@ -202,19 +202,19 @@ def create_answer_tool(self):
 
 ## Conclusion and Discussion
 
-This implementation is a proof of concept designed to explore Agentic RAG functionality and key features of the OpenAI SDK. It doesn't include the full range of features found in PaperQA, but you can use it as a guide to build your own agentic RAG system that gathers evidence before answering.
+This implementation is a proof of concept designed to explore Agentic RAG functionality and key features of the OpenAI Agents SDK. It doesn't include the full range of features found in PaperQA, but you can use it as a guide to build your own agentic RAG system that gathers evidence before answering.
 
-This approach—often called "Agentic RAG" or "Adaptive RAG"—has two core innovations: (1) the ability to run retrieval multiple times, ensuring relevancy and completeness (gathering), and (2) the ability to define and assess evidence before answering. This framework lets you create your own evidence assessment and validation strategy for your use case. Depending on your needs, you could develop innovative approaches to gather and validate evidence that are more reliable than traditional RAG for scientific, financial, or legal Q&A problems.
+This approach has two core innovations: (1) the ability to run retrieval multiple times, ensuring relevancy and completeness (gathering), and (2) the ability to define and assess evidence before answering. This framework lets you create your own evidence assessment and validation strategy for your use case. Depending on your needs, you could develop innovative approaches to gather and validate evidence that are more reliable than traditional RAG for scientific, financial, or legal Q&A problems.
 
 Additionally, this framework combines several advanced RAG techniques:
 
-1. Query reformulation and expansion: For each retrieval iteration, the master agent reformulates or expands the query to find more evidence
-2. Reranking: The gather tool uses an LLM as a judge to calculate the relevance of each chunk and rerank them, keeping the most relevant ones
-3. Self-correction and self-reflection: Both the master agent and answer agent reflect on the evidence gathered, the question, and the proposed answer before responding
+1. Query reformulation and expansion: For each retrieval iteration, the master agent reformulates or expands the query to find more evidence.
+2. Reranking: The gather tool uses an LLM as a judge to calculate the relevance of each chunk and rerank them, keeping the most relevant ones.
+3. Self-correction and self-reflection: Both the master agent and answer agent reflect on the evidence gathered, the question, and the proposed answer before responding.
 
 One concern is cost optimization at scale, given the high number of LLM calls for evidence assessment and the non-deterministic number of iterative tool calls.
 
-This first prototype serves as a baseline that I plan to build upon and improve. For instance, developing an evaluation dataset to assess the agent using tools like RAGA would be a good next step. I also plan to explore how to deploy this solution at scale using cloud platforms. I encourage you to follow the work on FutureHouse's PaperQA2 or similar products like AI2Scholar https://allenai.org/blog/ai2-scholarqa—these can help you develop ideas and intuition for your own agentic RAG approach.
+This first prototype serves as a baseline that I plan to build upon and improve. For instance, developing an evaluation dataset to assess the agent using a library like Ragas would be a good next step. I also plan to explore how to deploy this solution at scale using cloud platforms. I encourage you to follow the work on FutureHouse's PaperQA2 or similar products like AI2Scholar https://allenai.org/blog/ai2-scholarqa—these can help you develop ideas and intuition for your own agentic RAG approach.
 
 ## Project Link
 
