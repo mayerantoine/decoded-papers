@@ -34,6 +34,8 @@ However, the authors used their in-house [agent framework](https://github.com/fu
 
 My implementation follows the same concepts from the paper with some simplifications while maintaining the core innovation. I use a **retrieve-gather-answer** methodology with multi-agent RAG, where agents function as tools. The key difference: instead of searching for papers online, I initialize and index a vector database with the corpus of papers I want to query. An agent then autonomously retrieves passages, gathers evidence, and answers questions from this database.
 
+![Demo](./images/openai-agent-paperqa.gif)
+
 My approach consists of one main orchestrator agent with three tools: a search tool for retrieval using semantic search, a gather tool to collect evidence, and an answer tool to review all gathered evidence and summarize the final response. The orchestrator agent follows the [ReAct pattern](https://arxiv.org/abs/2210.03629)—reasoning and acting in a loop: it evaluates which tool to call, calls the tool, evaluates the output, and repeats. This design pattern behaves as a single-agent system because there's no handoff or conversation between agents. However, the complexity lies in how the tools themselves use other agents to achieve their goals and central context memory to share information, as I'll explain below.
 
 ![Design pattern](./images/design_pattern2.png)

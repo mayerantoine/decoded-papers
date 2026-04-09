@@ -13,6 +13,9 @@ badges:
   - image: "badge3"
     alt: "Microsoft Certified: Azure Fundamentals"
     url: "https://www.credly.com/earner/earned/badge/a5b43990-e36d-4149-ada3-a93c603fba06"
+  - image: "badge4"
+    alt: "AWS Certified Machine Learning Engineer – Associate"
+    url: "https://www.credly.com/earner/earned/badge/42a4ad58-bc81-4e4f-9d47-74663adeec53"
 ---
 
 ## About DecodedPapers
