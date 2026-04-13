@@ -1,7 +1,7 @@
 ---
 layout: ../layouts/AboutLayout.astro
 title: "About"
-description: "Learn about DecodedPapers and Mayer Antoine - bridging the gap between AI/ML research and practical implementation through code and tutorials."
+description: "Mayer Antoine — Data Scientist at CDC, AI/ML practitioner specializing in RAG systems, agentic AI, NLP, and public health informatics. Learn about DecodedPapers."
 showProfileImage: true
 badges:
   - image: "badge1"
@@ -20,15 +20,13 @@ badges:
 
 ## About DecodedPapers
 
-Welcome to DecodedPapers — where I share insights on AI/ML papers and books. As an AI/ML practitioner, I break down complex research into digestible practical implementations, showing you not just the theory but how to bring these ideas to life with code.
+Welcome to DecodedPapers — where AI research meets engineering practice.
 
-Here, you'll find:
+Most ML papers are written to prove a technique works at benchmark scale. I ask a different question: what can a practitioner actually extract and apply? Here you'll find working implementations of architectures and techniques from recent research — built with standard tools, modest compute, and the constraints real engineers actually face.
 
-- Step-by-step reproductions of state-of-the-art papers.
-- Real-world adaptations that demonstrate how theoretical concepts can solve practical problems.
-- Deep dives into implementation details that papers often gloss over.
+Each post documents not just the code, but the decisions: what I kept from the paper, what I adapted, what broke, and why. The goal isn't to reproduce benchmark numbers — it's to give you something you can run, customize, and carry into your own work.
 
-Whether you're a researcher, an engineer, a data science beginner, or just curious about the bleeding edge of machine learning, DecodedPapers bridges the gap between academic research and practical application. All code is available on GitHub, allowing you to experiment, extend, and build upon these implementations for your own projects.
+All implementations are available on GitHub. If a technique caught your attention in a paper but felt out of reach, this is where you find out whether it transfers.
 
 
 ## About Me

@@ -3,12 +3,17 @@ author: Mayer Antoine
 pubDatetime: 2026-04-04
 modDatetime: 2026-04-04
 title: A Practitioner’s Guide to Multi-Document Summarization with RAG:Ask–Retrieve–Relate–Summarize
-slug: a-practitioner-guide-to-multi-document-summarization-with-rag-ask -retrieve–relate–summarize
+slug: a-practitioner-guide-to-multi-document-summarization-with-rag-ask-retrieve–relate–summarize
 tags:
-  - Multi-document Summarization(MDS)  
-  - Retrieval-augmented generation(RAG)
-
-description: From Paper to Practice - Understanding the inegration of RAG in Multi document summarization pipeline.
+  - Multi-document Summarization
+  - RAG
+  - X-Sum
+  - hybrid retrieval
+  - ColBERT
+  - debate prompting
+  - SPECTER
+  - Python
+description: Implement the X-Sum framework for multi-document summarization using RAG, hybrid retrieval (ChromaDB + ColBERT), debate prompting, and SPECTER embeddings — with working Python code.
 ---
 
 ## Table of contents

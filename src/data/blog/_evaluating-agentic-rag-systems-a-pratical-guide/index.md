@@ -7,8 +7,14 @@ slug: evaluating-agentic-rag-systems-a-pratical-guide
 tags:
   - Agent
   - RAG
-  - Eval
-description: Evaluate search-gather-respond agentic RAG workflow on the PubMedQA dataset using RAGAS evaluation metrics to measure performance across multiple dimensions.
+  - RAGAS
+  - PubMedQA
+  - RAG evaluation
+  - context precision
+  - faithfulness
+  - ChromaDB
+  - medical AI
+description: Practical guide to evaluating agentic RAG on PubMedQA using RAGAS — covering context precision, faithfulness, answer correctness, and exact match with ChromaDB vector store.
 
 ---
 

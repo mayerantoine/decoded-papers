@@ -1,0 +1,34 @@
+# DecodedPapers
+
+> DecodedPapers is a practitioner-focused resource by Mayer Antoine. 
+> It extracts architectures and techniques from recent AI/ML research 
+> papers and implements them on real datasets using standard tools and 
+> modest compute — documenting every decision, adaptation, and tradeoff. 
+> Not benchmark reproduction. Practical engineering transfer.
+
+## About
+
+DecodedPapers is for ML engineers and AI practitioners who want to 
+apply research ideas without benchmark-scale infrastructure. Each post 
+answers the question: what can a practitioner actually extract and apply 
+from this paper? All implementations are available on GitHub.
+
+Core topics: Retrieval-Augmented Generation (RAG), agentic systems, 
+LLM evaluation, multi-document summarization, AI literature review.
+
+## Key implementations
+
+- [A Practitioner's Guide to Multi-Document Summarization with RAG](https://decodedpapers.com/posts/ask-retrieve-summarize/a-practitioner-guide-to-multi-document-summarization-with-rag-ask-retrieve-relate-summarize): Implements an Ask–Retrieve–Relate–Summarize pipeline for multi-document RAG using standard frameworks.
+- [Build Your Own AI Literature Review Tool](https://decodedpapers.com/posts/build-your-own-ai-litterature-review-tool): Working implementation of a cost-effective literature synthesis tool using RAG and LLM debate-style ranking, based on the LitLLM paper.
+- [Evaluating Agentic RAG Systems](https://decodedpapers.com/posts/evaluating-agentic-rag-systems-a-pratical-guide): Practical evaluation of a search-gather-respond agentic RAG workflow on PubMedQA using RAGAS metrics.
+- [Agentic RAG with OpenAI Agents SDK](https://decodedpapers.com/posts/evidencefirst-ai-implementing-agentic-rag-with-openai-agents-sdk): Evidence-first agentic RAG implementation reproducing the pattern from recent research using OpenAI's Agent SDK.
+
+## Author
+
+Mayer Antoine — AI/ML practitioner specialising in translating research 
+into engineering practice. Available for consulting on RAG systems, 
+agentic architectures, and LLM evaluation.
+
+Contact: mayerantoine@gmail.com  
+GitHub: https://github.com/mayerantoine  
+LinkedIn: https://www.linkedin.com/in/mayerantoine/

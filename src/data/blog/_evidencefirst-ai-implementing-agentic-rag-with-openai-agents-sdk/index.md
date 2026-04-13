@@ -5,10 +5,15 @@ modDatetime: 2025-10-05
 title: Evidence-First AI - Implementing Agentic RAG with OpenAI Agents SDK
 slug: evidencefirst-ai-implementing-agentic-rag-with-openai-agents-sdk
 tags:
-  - Retrieval-augmented generation(RAG)
+  - RAG
   - Agent
   - OpenAI Agents SDK
-description: From Paper to Practice - Reproducing Agentic RAG with OpenAI's Agent SDK.
+  - PaperQA
+  - ReAct
+  - multi-agent
+  - ChromaDB
+  - Python
+description: Build a PaperQA-inspired agentic RAG system using OpenAI Agents SDK — multi-agent orchestration, semantic search with ChromaDB, ReAct pattern, and LLM-as-judge reranking.
 ---
 
 ## Table of contents

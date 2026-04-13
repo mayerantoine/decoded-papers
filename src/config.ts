@@ -2,7 +2,7 @@ export const SITE = {
   website: "https://decodedpapers.com", // replace this with your deployed domain
   author: "Mayer Antoine",
   profile: "",
-  desc: "A personal blog about AI/ML papers and books.",
+  desc: "Hands-on implementations of AI/ML research papers — RAG systems, agentic workflows, NLP, and LLM techniques with code and tutorials.",
   title: "DecodedPapers",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,

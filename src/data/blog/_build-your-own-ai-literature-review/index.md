@@ -5,11 +5,16 @@ modDatetime: 2025-10-27
 title: Build Your Own AI Literature Review Tool :A Step-by-Step Guide Using RAG and LLM Debate Ranking
 slug: build-your-own-ai-litterature-review-tool
 tags:
-  - Multi Document Summarization
+  - Multi-document Summarization
   - RAG
   - Agent
-  - Debate prompting
-description: Learn how to build a cost-effective AI tool that synthesizes hundreds of research papers using RAG, debate-style ranking, based on the LitLLM research paper.
+  - debate prompting
+  - LitLLM
+  - BM25
+  - hybrid retrieval
+  - ChromaDB
+  - Python
+description: Build a cost-effective AI literature review tool using RAG, BM25 hybrid retrieval, and debate-style LLM ranking — based on the LitLLM paper, with CLI and web app.
 
 ---
 
