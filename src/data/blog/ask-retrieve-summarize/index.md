@@ -5,7 +5,7 @@ modDatetime: 2026-04-04
 title: A Practitioner’s Guide to Multi-Document Summarization with RAG:Ask–Retrieve–Relate–Summarize
 slug: a-practitioner-guide-to-multi-document-summarization-with-rag-ask -retrieve–relate–summarize
 tags:
-  - Multi-document Summurization(MDS)  
+  - Multi-document Summarization(MDS)  
   - Retrieval-augmented generation(RAG)
 
 description: From Paper to Practice - Understanding the inegration of RAG in Multi document summarization pipeline.
@@ -24,7 +24,7 @@ Multi-document summarization (MDS) remains a challenge, even with advances in la
 
 X-Sum is a sequential pipeline with four modules: ingestion, question generation, question answering, and summary generation. Figure 3 from the paper describes each module. The framework automatically generates questions about the main themes and contributions of a list of papers using an LLM. It then answers those questions using RAG, and finally uses the questions and answers to generate the summary.
 
-RAG is a pattern that grounds LLM answers in recent information or private datasets, helping prevent hallucinations and, in practice, expanding access to an internal knowledge base. Here, the RAG module serves as an insight-extraction tool.
+RAG is a pattern that grounds LLM answers in recent information or private datasets, helping prevent hallucinations and, in practice, expanding access to an external knowledge base. Here, the RAG module serves as an insight-extraction tool.
 
 This approach is clever and practical, and likely more cost-efficient than "stuff and summarize," which involves cramming full-text papers into the LLM context window and asking it to summarize. If you're already indexing your documents, adding a question-generation module to support summarization is also practical. As the paper notes, X-Sum can produce a factual summary that includes most of the core information across the papers.
 
@@ -49,7 +49,9 @@ PDFs → Chunk/Embed (ChromaDB + allenai-specter)
 
 ### Why this architecture works
 
-**Generate questions first, retrieve second.** Keyword search finds documents that contain matching terms. Question-driven search finds documents that *answer* something — semantically richer, especially across a diverse corpus of papers with different vocabularies. With K=5 questions per paper and 10 papers, you get 40 targeted retrieval queries instead of one vague "summarize these papers."
+**Generate questions first, retrieve second**. Questions are generated from each paper's title and abstract before any retrieval occurs. This forces the model to identify the important aspects and components of each paper without reading the full document — making it both token-efficient and analytically deliberate, rather than a passive scan.
+Question-driven retrieval is also semantically richer. Instead of one vague query like "summarize these papers," each question targets something specific the document should answer. This matters especially across a diverse corpus where papers use different vocabularies to describe related ideas — a question bridges that gap better than a keyword ever could.
+The compounding effect is significant: with K=5 questions per paper across 10 papers, you produce 50 targeted retrieval queries, each pulling the most relevant passage for a concrete information need.
 
 **ColBERT reranking.** After semantic search returns 100 candidate chunks per question, ColBERT re-scores them as cross-encoder pairs (query, chunk) and keeps the top 3. This is significantly more accurate than embedding similarity alone, and cheaper than asking an LLM to score relevance — ColBERT runs locally.
 
