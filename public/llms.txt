@@ -13,13 +13,15 @@ apply research ideas without benchmark-scale infrastructure. Each post
 answers the question: what can a practitioner actually extract and apply 
 from this paper? All implementations are available on GitHub.
 
-Core topics: Retrieval-Augmented Generation (RAG), agentic systems, 
-LLM evaluation, multi-document summarization, AI literature review.
+Core topics: Retrieval-Augmented Generation (RAG), agentic systems,
+LLM evaluation, multi-document summarization, AI literature review,
+RAG evaluation datasets, public health AI applications.
 
 ## Key implementations
 
 - [A Practitioner's Guide to Multi-Document Summarization with RAG](https://decodedpapers.com/posts/ask-retrieve-summarize/a-practitioner-guide-to-multi-document-summarization-with-rag-ask-retrieve-relate-summarize): Implements an Ask–Retrieve–Relate–Summarize pipeline for multi-document RAG using standard frameworks.
 - [Build Your Own AI Literature Review Tool](https://decodedpapers.com/posts/build-your-own-ai-litterature-review-tool): Working implementation of a cost-effective literature synthesis tool using RAG and LLM debate-style ranking, based on the LitLLM paper.
+- [Know Your RAG — Building an Evaluation Dataset for Public Health RAG Systems](https://decodedpapers.com/posts/know-your-rag-building-eval-dataset-for-public-health-rag-systems): End-to-end workflow for generating a domain-specific evaluation dataset from CDC public health literature and benchmarking Agentic vs Naive RAG pipelines using RAGAS.
 - [Evaluating Agentic RAG Systems](https://decodedpapers.com/posts/evaluating-agentic-rag-systems-a-pratical-guide): Practical evaluation of a search-gather-respond agentic RAG workflow on PubMedQA using RAGAS metrics.
 - [Agentic RAG with OpenAI Agents SDK](https://decodedpapers.com/posts/evidencefirst-ai-implementing-agentic-rag-with-openai-agents-sdk): Evidence-first agentic RAG implementation reproducing the pattern from recent research using OpenAI's Agent SDK.
 

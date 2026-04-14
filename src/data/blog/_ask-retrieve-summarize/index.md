@@ -2,8 +2,8 @@
 author: Mayer Antoine
 pubDatetime: 2026-04-04
 modDatetime: 2026-04-04
-title: A Practitioner’s Guide to Multi-Document Summarization with RAG:Ask–Retrieve–Relate–Summarize
-slug: a-practitioner-guide-to-multi-document-summarization-with-rag-ask-retrieve–relate–summarize
+title: A Practitioner’s Guide to Multi-Document Summarization with RAG: Ask–Retrieve–Relate–Summarize
+slug: a-practitioner-guide-to-multi-document-summarization-with-rag-ask-retrieve-relate-summarize
 tags:
   - Multi-document Summarization
   - RAG
@@ -21,7 +21,7 @@ description: Implement the X-Sum framework for multi-document summarization usin
 
 ## Introduction
 
-To address the challenge of multi-document summarization in my own workflow and learning, I explored and implemented *[X-Sum—Ask, Retrieve, Summarize: A Modular Pipeline for Scientific Literature Summarization](https://arxiv.org/html/2505.16349v1)* While we often think of Retrieval Augmented Generation (RAG) as a standalone pattern, this paper demonstrates an integration of RAG in an agentic workflow. In this post, I'll explain my implementation of X-Sum, my assumptions, and demonstrate some fundamentals of building an agentic workflow.
+To address the challenge of multi-document summarization in my own workflow, I explored and implemented *[X-Sum—Ask, Retrieve, Summarize: A Modular Pipeline for Scientific Literature Summarization](https://arxiv.org/html/2505.16349v1)*. While we often think of Retrieval Augmented Generation (RAG) as a standalone pattern, this paper demonstrates an integration of RAG into an agentic workflow. In this post, I'll explain my implementation of X-Sum, my assumptions, and demonstrate some fundamentals of building an agentic workflow.
 
 Multi-document summarization (MDS) remains a challenge, even with advances in large language models. The concept is not new, and the task is relevant to any knowledge workflow. The goal is to automatically condense large volumes of related documents into a single, concise summary while preserving salient information, allowing information professionals to quickly digest the essentials. Because information comes from multiple sources with different structures, writing styles, and perspectives, fusing it into a coherent, logically flowing summary, while accounting for redundancy and contradictions, is a fundamentally harder compositional problem.
 
@@ -55,7 +55,9 @@ PDFs → Chunk/Embed (ChromaDB + allenai-specter)
 ### Why this architecture works
 
 **Generate questions first, retrieve second**. Questions are generated from each paper's title and abstract before any retrieval occurs. This forces the model to identify the important aspects and components of each paper without reading the full document — making it both token-efficient and analytically deliberate, rather than a passive scan.
+
 Question-driven retrieval is also semantically richer. Instead of one vague query like "summarize these papers," each question targets something specific the document should answer. This matters especially across a diverse corpus where papers use different vocabularies to describe related ideas — a question bridges that gap better than a keyword ever could.
+
 The compounding effect is significant: with K=5 questions per paper across 10 papers, you produce 50 targeted retrieval queries, each pulling the most relevant passage for a concrete information need.
 
 **ColBERT reranking.** After semantic search returns 100 candidate chunks per question, ColBERT re-scores them as cross-encoder pairs (query, chunk) and keeps the top 3. This is significantly more accurate than embedding similarity alone, and cheaper than asking an LLM to score relevance — ColBERT runs locally.
@@ -381,5 +383,5 @@ The improvements in Pipeline 2 are not radical departures: same retrieval infras
 
 The real lesson: **building agentic pipelines is mostly about how you decompose tasks and structure information flow between agents.** A well-structured prompt given the right inputs consistently outperforms a generic prompt given everything at once.
 
-GitHub Project : https://github.com/mayerantoine/explore-xsum
+GitHub Project: https://github.com/mayerantoine/explore-xsum
  
