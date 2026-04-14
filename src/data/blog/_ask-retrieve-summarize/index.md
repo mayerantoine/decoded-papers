@@ -2,7 +2,7 @@
 author: Mayer Antoine
 pubDatetime: 2026-04-04
 modDatetime: 2026-04-04
-title: A Practitioner’s Guide to Multi-Document Summarization with RAG: Ask–Retrieve–Relate–Summarize
+title: "A Practitioner’s Guide to Multi-Document Summarization with RAG: Ask–Retrieve–Relate–Summarize"
 slug: a-practitioner-guide-to-multi-document-summarization-with-rag-ask-retrieve-relate-summarize
 tags:
   - Multi-document Summarization
