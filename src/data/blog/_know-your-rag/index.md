@@ -61,11 +61,6 @@ Evaluation uses [RAGAS](https://docs.ragas.io/) metrics: `AnswerCorrectness` and
 **Part 4 — Comparison**
 Side-by-side mean score table comparing both RAG systems on the generated evaluation dataset.
 
-```python
-%load_ext autoreload
-%autoreload 2
-```
-
 
 ```python
 import os
@@ -1050,7 +1045,7 @@ Sections 3.3 and 3.4 execute this loop on two different architectures — Agenti
 
 ### 3.3 AgenticRAG
 
-The `AgenticRAG` system implements a **multi-agent loop** using the [OpenAI Agents SDK](https://github.com/openai/openai-agents-python):
+The `AgenticRAG` system implements a **multi-agent loop** described in detail in [Agentic RAG with OpenAI Agents SDK](https://decodedpapers.com/posts/evidencefirst-ai-implementing-agentic-rag-with-openai-agents-sdk/):
 
 1. **Search agent** — performs semantic search over the vector store for a given question or rephrased sub-question
 2. **Evidence agent** — scores each retrieved chunk for relevance (1–10) and summarizes the relevant content
