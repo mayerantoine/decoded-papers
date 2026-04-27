@@ -1,33 +1,32 @@
 ---
 author: Mayer Antoine
-pubDatetime: 2026-04-13
-modDatetime: 2026-04-13
+pubDatetime: 2026-04-27
+modDatetime: 2026-04-27
 title: Know Your RAG — Building an Evaluation Dataset for Public Health RAG Systems
 slug: know-your-rag-building-eval-dataset-for-public-health-rag-systems
-draft: True
+draft: False
 tags:
   - RAG
   - RAG evaluation
+  - Evaluation Dataset
   - RAGAS
-  - OpenAI Agents SDK
-  - multi-agent
   - ChromaDB
+  - multi-agent
   - public health AI
-  - public health RAG
   - Python
-description: Build a domain-specific RAG evaluation dataset from CDC public health literature using the Know Your RAG framework — LLM-generated questions, critique filtering, and RAGAS benchmarking of Agentic vs Naive RAG pipelines.
+description: Build a domain-specific RAG evaluation dataset from public health literature using the Know Your RAG framework — LLM-generated questions, critique filtering, and RAGAS benchmarking of Agentic vs Naive RAG pipelines.
 ---
 
 ## Table of contents
 
 ## Know Your RAG
 
-Retrieval-Augmented Generation (RAG) has emerged as the dominant pattern for building question-answering systems over domain-specific corpora. Yet evaluating RAG in specialized domains — where factual precision matters and hallucinations can have real consequences — remains a hard, underexplored problem.
+This notebook demonstrates an end-to-end workflow for **generating a domain-specific evaluation dataset** and using it to benchmark two RAG architectures on epidemiological literature. We apply the methodology from [Know Your RAG (Lima et al., 2024)](https://arxiv.org/abs/2411.19710) to articles from the [Preventing Chronic Disease (PCD)](https://www.cdc.gov/pcd/) journal — a CDC open-access publication focused on public health research — and compare an AgenticRAG system against a NaiveRAG baseline using RAGAS metrics.
 
-This notebook demonstrates an end-to-end workflow for **generating a domain-specific evaluation dataset** and using it to benchmark two RAG architectures on epidemiological literature. We apply the methodology from [Know Your RAG (Lima et al., 2024)](https://arxiv.org/abs/2411.19710) to articles from the [Preventing Chronic Disease (PCD)](https://www.cdc.gov/pcd/) journal — a CDC open-access publication focused on public health research.
+Retrieval-Augmented Generation (RAG) has emerged as the dominant pattern for building question-answering systems over domain-specific corpora. Yet evaluating RAG in specialized domains — where factual precision matters and hallucinations can have real consequences — remains a hard, open problem.
 
-**Why does this matter for public health?**  
-RAG systems built for public health applications — clinical decision support, disease surveillance, policy guidance — must be rigorously tested. A system that retrieves the wrong evidence or generates a plausible-sounding but incorrect answer about chronic disease risk factors is not just unhelpful: it can be actively harmful. Systematic evaluation with realistic, domain-grounded questions is a prerequisite for deploying these systems responsibly.
+**Why does this matter for public health?**
+RAG systems built for public health applications — clinical decision support, disease surveillance, policy guidance — must be rigorously tested. A system that retrieves the wrong evidence or generates a plausible-sounding but incorrect answer about chronic disease risk factors is not just unhelpful: it can actively mislead decisions about population health. Systematic evaluation with realistic, domain-grounded questions is a prerequisite for deploying these systems responsibly.
 
 **What you will learn:**
 1. How to load and chunk scientific HTML articles from the CDC corpus
@@ -36,11 +35,7 @@ RAG systems built for public health applications — clinical decision support, 
 4. How to index a corpus and evaluate two RAG systems (Agentic and Naive) using RAGAS
 5. How to compare results in a structured evaluation table
 
-## References
-
-- Lima, Rafael Teixeira de et al. *"Know Your RAG: Dataset Taxonomy and Generation Strategies for Evaluating RAG Systems."* ArXiv abs/2411.19710 (2024). [Paper](https://arxiv.org/abs/2411.19710)
-- Aymeric Roucher. *RAG Evaluation.* HuggingFace Cookbook. [Notebook](https://huggingface.co/learn/cookbook/en/rag_evaluation)
-- CDC. *CDC Text Corpora for Learners — MMWR, EID, and PCD Articles.* data.cdc.gov. [Dataset](https://data.cdc.gov/National-Center-for-State-Tribal-Local-and-Territo/CDC-Text-Corpora-for-Learners-MMWR-EID-and-PCD-Art/7rih-tqi5)
+> **Before you begin:** All custom modules used in this notebook (`loader.py`, `rag_agent.py`, `rag_rerank.py`, `vectorstore.py`) are available at [github.com/mayerantoine/know-your-rag](https://github.com/mayerantoine/know-your-rag). Clone the repo and install dependencies before running any cells below.
 
 ## Notebook Overview
 
@@ -66,16 +61,10 @@ Evaluation uses [RAGAS](https://docs.ragas.io/) metrics: `AnswerCorrectness` and
 **Part 4 — Comparison**
 Side-by-side mean score table comparing both RAG systems on the generated evaluation dataset.
 
-> **Companion repository:** All custom modules (`loader.py`, `rag_agent.py`, `rag_rerank.py`, `vectorstore.py`) are available at [github.com/mayerantoine/know-your-rag](https://github.com/mayerantoine/know-your-rag). Clone the repo and install dependencies before running the notebook.
-
 ```python
 %load_ext autoreload
 %autoreload 2
 ```
-
-    The autoreload extension is already loaded. To reload it, use:
-      %reload_ext autoreload
-
 
 
 ```python
@@ -277,6 +266,8 @@ df_filtered['merge_section'] = df_filtered['Section'].fillna(df_filtered['SubSec
 ```
 
 
+The `keep` list below is a broad allowlist that discards noise sections (References, footnotes, boilerplate). `active_sections` — defined next — is the narrower subset that actually drives question generation. Introduction and Background are retained in the DataFrame but are never sampled for question generation.
+
 ```python
 keep = ['Introduction',
         'Background',
@@ -380,12 +371,9 @@ df_final_sample
 
 The Know Your RAG framework generates questions **indirectly**: rather than asking an LLM to write a question directly from a passage, it first extracts **intermediate statements** and then generates a question for each statement. This two-step process produces more grounded, specific questions and makes critique easier (since you can verify the statement against the context independently of the question).
 
-The pipeline for each chunk is:
+The pipeline for each passage or chunk is:
 
-```
-chunk → theme extraction → factual statements → [fact_single questions]
-                                              ↘ reasoning statements → [reasoning questions]
-```
+![Question generation pipeline](./images/question_gen.png)
 
 All generation functions accept a `provider` argument (`'openai'` or `'ollama'`) so you can swap the underlying model without changing the pipeline logic.
 
@@ -467,7 +455,7 @@ def generate_theme(context: str, provider='openai'):
     return call_llm(provider=provider, instructions=instructions,
                     prompt=theme_prompt, response_format=None)
 ```
-The helper functions below support all generation steps. `generate_questions` turns a statement into a standalone search query; `is_standalone` is a fast phrase-matching pre-filter that rejects questions containing context-referencing phrases before the expensive critique LLM is called. `deduplicate_questions` and `global_deduplicate` (shown after) remove near-duplicate questions at the per-context and global levels respectively.
+The helper functions below support all generation steps. `generate_questions` turns a statement into a standalone search query; `is_standalone` is a fast phrase-matching pre-filter that rejects questions containing context-referencing phrases before the expensive critique LLM is called. 
 
 
 ```python
@@ -512,6 +500,7 @@ def is_standalone(question: str) -> bool:
     return not any(phrase in q_lower for phrase in CONTEXT_REFERENCE_PHRASES)
 ```
 
+`deduplicate_questions` and `global_deduplicate` (shown after) remove near-duplicate questions at the per-context and global levels respectively. **This step is not in the original Know Your RAG paper — it was added here because LLMs reliably generate semantically similar questions when processing related chunks.** In a corpus of epidemiological studies, many papers describe similar populations or methods in similar language, and the same question can surface independently from multiple passages. Leaving near-duplicates in the evaluation set inflates scores by testing the same thing repeatedly. While not a validated approach, TF-IDF cosine similarity is a practical and interpretable first pass for catching these before they reach the critique step: a strict threshold (0.80) is applied per-context to remove near-identical variants of the same question, and a relaxed threshold (0.85) is applied globally to remove cross-context duplicates without over-filtering genuinely similar but distinct questions.
 
 ```python
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -733,6 +722,7 @@ print(f'  Removed (per-context duplicates): {duplicates_removed}')
       Skipped (context-referencing): 0
       Removed (per-context duplicates): 0
 
+The generation loop produced 45 questions distributed across `fact_single` and `reasoning` types, one per statement extracted from each sampled chunk. Before these reach the evaluation set, each question is scored for quality by a separate critique LLM — the next step filters out questions that are vague, context-dependent, or poorly grounded.
 
 ### 2.3 Critique & Filter
 
@@ -748,8 +738,6 @@ Not all generated questions are suitable for evaluation. The Know Your RAG paper
 | **qa_tautology** | Does the answer add information beyond the question? | Especially important for fact_single — answers that just restate the question measure nothing |
 
 The two metrics from the original paper that we omit — `c_usefulness` and `c_clarity` — evaluate context quality, which is already enforced upstream by size filtering (2,000–10,000 characters) and section filtering.
-
----
 
 
 ```python
@@ -984,13 +972,13 @@ generated_questions = pd.DataFrame(data)
 generated_questions.head(), len(generated_questions)
 
 ```
-The critique scores are now attached to every question. We filter to retain only questions that pass all thresholds (groundedness ≥ 3, feasibility ≥ 3, standalone ≥ 3, usefulness ≥ 3) and save the result to `generate_questions.csv`. Persisting to disk lets you reload the filtered dataset in a fresh session without re-running the expensive generation and critique steps.
+The critique scores are now attached to every question. We filter to retain only questions that pass all thresholds (groundedness ≥ 3, feasibility ≥ 3, standalone ≥ 3, usefulness ≥ 3) and save the result to `generate_questions.csv`. Persisting to disk lets you reload the filtered dataset in a fresh session without re-running the expensive generation and critique steps. Note that `qa_tautology` is tracked but not applied as a hard filter: reasoning statements are inferred conclusions that necessarily rephrase and synthesize the question's topic, so they inherently score lower on this metric. A strict tautology gate would disproportionately drop valid reasoning questions.
 
 ```python
 generated_questions_filtered = generated_questions.loc[
     (generated_questions["qc_groundness"] >= 3)
     & (generated_questions["ac_groundness"] >= 3)
-    & (generated_questions["q_feasbility"] >= 3)
+    & (generated_questions["q_feasibility"] >= 3)
     & (generated_questions["stand_alone"] >= 3)   # re-enabled after prompt improvements
     & (generated_questions["q_usefulness"] >= 3)
    #& (generated_questions["qa_tautology"] >= 4)
@@ -1029,6 +1017,7 @@ eval_ds[:2]
 
 ```
 
+The filtered evaluation dataset is now ready — a list of `(context, question, answer)` records that will serve as input to both RAG pipelines. Part 3 covers indexing the full PCD corpus into a vector store and running each architecture against this dataset to produce RAGAS scores.
 
 ## Part 3 — RAG System Evaluation
 
@@ -1037,6 +1026,8 @@ eval_ds[:2]
 Before evaluating, we index the full PCD corpus into a **ChromaDB vector store** using `sentence-transformers/allenai-specter` embeddings — a model specifically trained on scientific paper titles and abstracts, making it well-suited for epidemiological literature.
 
 The corpus is chunked using `RecursiveCharacterTextSplitter` (chunk size 1,000, overlap 200) to produce retrieval-optimized chunks that are smaller than the question-generation chunks used in Part 2. Separating indexing chunks from generation chunks is intentional: generation benefits from larger, section-complete contexts, while retrieval benefits from smaller, focused chunks.
+
+> **Note:** Two separate chunk sizes are used intentionally. Generation (Part 2) uses large section-aligned chunks (2,000–10,000 chars) so the LLM has full context for statement extraction. Retrieval (Part 3) uses smaller chunks (1,000 chars) so semantic search returns focused, specific passages. Mixing the two would degrade both generation quality and retrieval precision.
 
 ```python
 # Retrieval chunks: smaller than generation chunks for focused semantic matching
@@ -1049,7 +1040,15 @@ text_splitter = RecursiveCharacterTextSplitter(
 
 The `chunking()` method applies this splitter internally — see [`vectorstore.py`](https://github.com/mayerantoine/know-your-rag/blob/main/vectorstore.py) for the full implementation.
 
-### 3.2 AgenticRAG
+### 3.2 The Evaluation Process
+
+![Eval Process](./images/eval_process.png)
+
+Each question from the evaluation dataset is passed to the RAG system, which retrieves relevant contexts and generates an answer. The resulting `(question, answer, retrieved_contexts, reference)` tuple is then scored by RAGAS. Running this loop independently for both architectures produces the per-question score tables compared in Part 4.
+
+Sections 3.3 and 3.4 execute this loop on two different architectures — AgenticRAG first as the more complex system, NaiveRAG second as the baseline. Both produce CSV outputs (`eval_results_agentic.csv`, `eval_results_naive.csv`) that feed directly into the comparison table in Part 4.
+
+### 3.3 AgenticRAG
 
 The `AgenticRAG` system implements a **multi-agent loop** using the [OpenAI Agents SDK](https://github.com/openai/openai-agents-python):
 
@@ -1256,7 +1255,7 @@ results_eval
 
 
 
-### 3.3 NaiveRAG with Reranking
+### 3.4 NaiveRAG with Reranking
 
 The `NaiveRAG` system represents the **baseline single-pass approach**:
 
@@ -1287,6 +1286,7 @@ print('NaiveRAG ready')
 
 ```python
 # Smoke-test: ask a single question before running the full eval loop
+# output omitted for brevity — verify answer is non-empty before running the full eval loop
 test_question = eval_ds[0]['question']
 answer, status = naive_rag.ask_question(test_question)
 print(f'Q: {test_question}')
@@ -1384,12 +1384,13 @@ results_naive
 Both RAG systems are evaluated using [RAGAS](https://docs.ragas.io/) on the filtered evaluation dataset:
 
 - **Answer Correctness** — measures semantic similarity between the generated answer and the reference answer (the original statement). Captures whether the system produces the right information.
-- **Faithfulness** — measures whether the generated answer is grounded in the retrieved contexts. Captures hallucination: a high faithfulness score means the system's answer can be traced back to retrieved evidence.
+- **Faithfulness** — measures whether the generated answer is grounded in the retrieved contexts. A high faithfulness score means the system's answer can be traced back to retrieved evidence, indicating low hallucination risk.
 
 For public health applications, **faithfulness is particularly critical** — a system that generates accurate-sounding answers not grounded in retrieved evidence is producing hallucinations, which is unacceptable in a clinical or policy context.
 
 ### 4.2 Results
 
+> **Note: These scores are based on 10 questions — sufficient for a proof-of-concept but not for statistically robust conclusions.** Increase `EVAL_SAMPLE_N` in the configuration cell to scale up before drawing any broader inferences.
 
 ```python
 import pandas as pd
@@ -1415,11 +1416,11 @@ comparison
     NaiveRAG              0.299130      0.570909
 
 
-The table above is the core output of this pipeline: a side-by-side score comparison grounded in a domain-specific evaluation dataset built entirely from PCD literature. The numbers reflect both the quality of the retrieval strategy and the quality of the evaluation questions — which is why investing in the generation pipeline matters. Note that both systems are evaluated on a sample of 10 questions — sufficient for a proof-of-concept comparison but not for statistically robust conclusions. Scale `EVAL_SAMPLE_N` in the configuration cell to evaluate on a larger set.
+The table above is the core output of this pipeline: a side-by-side score comparison grounded in a domain-specific evaluation dataset built entirely from PCD literature. On this small sample, AgenticRAG produced higher scores on both metrics than NaiveRAG. The numbers reflect both the quality of the retrieval strategy and the quality of the evaluation questions — which is why investing in the generation pipeline matters.
 
 ## Conclusion
 
-This notebook demonstrated a complete, reproducible pipeline for **building a domain-specific evaluation dataset and benchmarking RAG systems on epidemiological literature** — from raw HTML articles to RAGAS scores.
+This notebook demonstrated a complete, reproducible pipeline for **building a domain-specific evaluation dataset and benchmarking RAG systems on epidemiological literature** — from raw HTML articles to RAGAS scores. In this experiment, AgenticRAG produced higher answer correctness and faithfulness than NaiveRAG. This is consistent with the expectation that iterative evidence scoring helps on questions requiring synthesis across multiple passages — but **10 questions is not enough to draw general conclusions**. 
 
 ### What we built
 
@@ -1431,16 +1432,16 @@ Starting from PCD articles in the CDC open corpus, we:
 4. **Indexed the corpus** into a ChromaDB vector store using `allenai-specter` embeddings optimized for scientific text
 5. **Evaluated two RAG architectures** — AgenticRAG (multi-agent loop) and NaiveRAG (retrieve → rerank → generate) — using RAGAS `AnswerCorrectness` and `Faithfulness`
 
-### Key takeaways
+### Key takeaway
 
-**On evaluation dataset quality:**  
 Generic evaluation datasets borrowed from other domains are a poor fit for public health RAG. Epidemiological text has domain-specific failure modes — study-scoped language, implicit population references, near-duplicate statistics across papers — that require targeted prompt engineering and filtering to produce meaningful evaluation questions. The multi-stage quality pipeline here (diversity constraints → standalone filter → critique → deduplication) addresses each of these systematically.
 
-**On RAG architecture:**  
-The comparison between AgenticRAG and NaiveRAG reveals the trade-off between retrieval depth and answer faithfulness. The agentic loop's iterative evidence scoring tends to improve answer correctness on reasoning questions — where synthesizing multiple passages is necessary — but may reduce faithfulness if the evidence agent introduces inferences not grounded in retrieved text. NaiveRAG's single-pass design produces more conservative, traceable answers at lower cost and latency.
 
-**On public health applications:**  
-For RAG systems deployed in public health contexts — clinical guidance, disease surveillance, policy research — **faithfulness should be weighted more heavily than correctness**. A system that retrieves the right evidence but fails to stay grounded in it is producing hallucinations, which is unacceptable when the output informs decisions about population health. The evaluation framework here makes that trade-off visible and measurable.
+### Limitations
+
+**Model dependency.** All generation steps — statement extraction, question generation, critique scoring — and the final RAGAS evaluation used `gpt-4o-mini`. A stronger model (GPT-4o, Claude Sonnet) may produce higher-quality statements, better-calibrated critique scores, and different pass/fail decisions at the filter step. The pipeline architecture is model-agnostic, but the specific results here should not be assumed to generalize across model families or to smaller open-source models.
+
+**Critique threshold calibration.** The filter threshold of ≥ 3 across all critique metrics is a pragmatic midpoint on a 1–5 scale — not derived from the original paper or validated against human judgment. A stricter threshold (≥ 4) produces fewer but higher-quality questions; a looser one (≥ 2) retains more questions but risks including weak or borderline ones that reduce evaluation signal. The right threshold depends on corpus size, acceptable evaluation set size, and downstream use. Calibrating these thresholds against human-annotated quality judgments is a natural next step before using this pipeline in production.
 
 ### Next steps
 
@@ -1451,3 +1452,9 @@ For RAG systems deployed in public health contexts — clinical guidance, diseas
 - **Compare embedding models** — `allenai-specter` vs. `all-MiniLM-L6-v2` vs. a biomedical model like `BiomedBERT`.
 - **Extend and compare to other RAG frameworks** such as GraphRAG, LightRAG, or RAPTOR.
 - Additionally, such a domain-heavy tool must include review and input from subject matter experts.
+
+## References
+
+- Lima, Rafael Teixeira de et al. *"Know Your RAG: Dataset Taxonomy and Generation Strategies for Evaluating RAG Systems."* ArXiv abs/2411.19710 (2024). [Paper](https://arxiv.org/abs/2411.19710)
+- Aymeric Roucher. *RAG Evaluation.* HuggingFace Cookbook. [Notebook](https://huggingface.co/learn/cookbook/en/rag_evaluation)
+- CDC. *CDC Text Corpora for Learners — MMWR, EID, and PCD Articles.* data.cdc.gov. [Dataset](https://data.cdc.gov/National-Center-for-State-Tribal-Local-and-Territo/CDC-Text-Corpora-for-Learners-MMWR-EID-and-PCD-Art/7rih-tqi5)

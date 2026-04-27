@@ -24,6 +24,7 @@ RAG evaluation datasets, public health AI applications.
 - [Know Your RAG — Building an Evaluation Dataset for Public Health RAG Systems](https://decodedpapers.com/posts/know-your-rag-building-eval-dataset-for-public-health-rag-systems): End-to-end workflow for generating a domain-specific evaluation dataset from CDC public health literature and benchmarking Agentic vs Naive RAG pipelines using RAGAS.
 - [Evaluating Agentic RAG Systems](https://decodedpapers.com/posts/evaluating-agentic-rag-systems-a-pratical-guide): Practical evaluation of a search-gather-respond agentic RAG workflow on PubMedQA using RAGAS metrics.
 - [Agentic RAG with OpenAI Agents SDK](https://decodedpapers.com/posts/evidencefirst-ai-implementing-agentic-rag-with-openai-agents-sdk): Evidence-first agentic RAG implementation reproducing the pattern from recent research using OpenAI's Agent SDK.
+- [Lessons Learned from Implementing a Multi-Agent Conversational Recommender System (MACRS)](https://decodedpapers.com/posts/lessons-learned-multi-agent-conversational-recommender-system): Implements MACRS using the OpenAI Agents SDK — hub-and-spoke planning, parallel agent execution, and reflection loops for self-correcting conversational recommendations.
 
 ## Author
 
