@@ -1020,40 +1020,6 @@ The filtered evaluation dataset is now ready — a list of `(context, question, 
 
 Before evaluating, we index the full PCD corpus into a **ChromaDB vector store** using `sentence-transformers/allenai-specter` embeddings — a model specifically trained on scientific paper titles and abstracts, making it well-suited for epidemiological literature.
 
-The corpus is chunked using `RecursiveCharacterTextSplitter` (chunk size 1,000, overlap 200) to produce retrieval-optimized chunks that are smaller than the question-generation chunks used in Part 2. Separating indexing chunks from generation chunks is intentional: generation benefits from larger, section-complete contexts, while retrieval benefits from smaller, focused chunks.
-
-> **Note:** Two separate chunk sizes are used intentionally. Generation (Part 2) uses large section-aligned chunks (2,000–10,000 chars) so the LLM has full context for statement extraction. Retrieval (Part 3) uses smaller chunks (1,000 chars) so semantic search returns focused, specific passages. Mixing the two would degrade both generation quality and retrieval precision.
-
-```python
-# Retrieval chunks: smaller than generation chunks for focused semantic matching
-text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1000,
-    chunk_overlap=200,
-)
-# Note: this chunking is handled internally by VectorStoreAbstract.chunking()
-```
-
-The `chunking()` method applies this splitter internally — see [`vectorstore.py`](https://github.com/mayerantoine/know-your-rag/blob/main/vectorstore.py) for the full implementation.
-
-### 3.2 The Evaluation Process
-
-![Eval Process](./images/eval_process.png)
-
-Each question from the evaluation dataset is passed to the RAG system, which retrieves relevant contexts and generates an answer. The resulting `(question, answer, retrieved_contexts, reference)` tuple is then scored by RAGAS. Running this loop independently for both architectures produces the per-question score tables compared in Part 4.
-
-Sections 3.3 and 3.4 execute this loop on two different architectures — AgenticRAG first as the more complex system, NaiveRAG second as the baseline. Both produce CSV outputs (`eval_results_agentic.csv`, `eval_results_naive.csv`) that feed directly into the comparison table in Part 4.
-
-### 3.3 AgenticRAG
-
-The `AgenticRAG` system implements a **multi-agent loop** described in detail in [Agentic RAG with OpenAI Agents SDK](https://decodedpapers.com/posts/evidencefirst-ai-implementing-agentic-rag-with-openai-agents-sdk/):
-
-1. **Search agent** — performs semantic search over the vector store for a given question or rephrased sub-question
-2. **Evidence agent** — scores each retrieved chunk for relevance (1–10) and summarizes the relevant content
-3. **Answer agent** — synthesizes the accumulated evidence into a final answer
-
-The orchestrator loops until it has collected enough high-quality evidence (configurable via `max_evidence_pieces` and `relevance_cutoff`) or exhausted its search attempts (`max_search_attempts`). This architecture is designed to handle complex, multi-hop questions that require iterative retrieval — common in epidemiological research where a single question may require evidence from multiple sections of multiple papers.
-
-
 ```python
 from vectorstore import VectorStoreAbstract
 
@@ -1082,7 +1048,7 @@ print(f'VectorStore initialized with {len(abstracts)} source documents')
        New empty collection created
     VectorStore initialized with 1963 source documents
 
-
+The corpus is chunked using `RecursiveCharacterTextSplitter` (chunk size 1,000, overlap 200) to produce retrieval-optimized chunks that are smaller than the question-generation chunks used in Part 2. Separating indexing chunks from generation chunks is intentional: generation benefits from larger, section-complete contexts, while retrieval benefits from smaller, focused chunks.
 
 ```python
 %%time
@@ -1098,6 +1064,27 @@ else:
     print(f'Using existing index ({vector_store.get_document_count()} chunks)')
 
 ```
+
+The `chunking()` method applies this splitter internally — see [`vectorstore.py`](https://github.com/mayerantoine/know-your-rag/blob/main/vectorstore.py) for the full implementation.
+
+### 3.2 The Evaluation Process
+
+![Eval Process](./images/eval_process.png)
+
+Each question from the evaluation dataset is passed to the RAG system, which retrieves relevant contexts and generates an answer. The resulting `(question, answer, retrieved_contexts, reference)` tuple is then scored by RAGAS. Running this loop independently for both architectures produces the per-question score tables compared in Part 4.
+
+Sections 3.3 and 3.4 execute this loop on two different architectures — AgenticRAG first as the more complex system, NaiveRAG second as the baseline. Both produce CSV outputs (`eval_results_agentic.csv`, `eval_results_naive.csv`) that feed directly into the comparison table in Part 4.
+
+### 3.3 AgenticRAG
+
+The `AgenticRAG` system implements a **multi-agent loop** described in detail in [Agentic RAG with OpenAI Agents SDK](https://decodedpapers.com/posts/evidencefirst-ai-implementing-agentic-rag-with-openai-agents-sdk/):
+
+1. **Search agent** — performs semantic search over the vector store for a given question or rephrased sub-question
+2. **Evidence agent** — scores each retrieved chunk for relevance (1–10) and summarizes the relevant content
+3. **Answer agent** — synthesizes the accumulated evidence into a final answer
+
+The orchestrator loops until it has collected enough high-quality evidence (configurable via `max_evidence_pieces` and `relevance_cutoff`) or exhausted its search attempts (`max_search_attempts`). This architecture is designed to handle complex, multi-hop questions that require iterative retrieval — common in epidemiological research where a single question may require evidence from multiple sections of multiple papers.
+
 RAGAS evaluation metrics require an LLM for scoring. We wrap `gpt-4o-mini` in a `LangchainLLMWrapper` for RAGAS compatibility. We use the legacy metric classes (`ragas.metrics._answer_correctness`, `ragas.metrics._faithfulness`) which are stable with the installed RAGAS version.
 
 
@@ -1376,7 +1363,11 @@ results_naive
 
 ### 4.1 RAGAS Evaluation Metrics
 
-Both RAG systems are evaluated using [RAGAS](https://docs.ragas.io/) on the filtered evaluation dataset:
+Both RAG systems are evaluated using [RAGAS](https://docs.ragas.io/) on the filtered evaluation dataset.
+
+[RAGAS](https://docs.ragas.io/) (Retrieval-Augmented Generation Assessment) is an open-source framework for evaluating RAG pipelines without requiring human-annotated answers. It uses LLM-based judges to score each `(question, generated answer, retrieved contexts, reference answer)` tuple across multiple dimensions. RAGAS is well-suited here because it can operate on the synthetic ground truth we generated in Part 2 — no human labeling required.
+
+For simplicity, we compute only two metrics here. RAGAS provides a broader suite — including **Context Precision**, **Context Recall**, **Response Relevancy**, and **Topic Adherence** — that can pinpoint whether failures originate in retrieval or generation. These are natural additions for a more complete evaluation (see Next Steps).
 
 - **Answer Correctness** — measures semantic similarity between the generated answer and the reference answer (the original statement). Captures whether the system produces the right information.
 - **Faithfulness** — measures whether the generated answer is grounded in the retrieved contexts. A high faithfulness score means the system's answer can be traced back to retrieved evidence, indicating low hallucination risk.
@@ -1427,10 +1418,13 @@ Starting from PCD articles in the CDC open corpus, we:
 4. **Indexed the corpus** into a ChromaDB vector store using `allenai-specter` embeddings optimized for scientific text
 5. **Evaluated two RAG architectures** — AgenticRAG (multi-agent loop) and NaiveRAG (retrieve → rerank → generate) — using RAGAS `AnswerCorrectness` and `Faithfulness`
 
-### Key takeaway
+### Key takeaways
 
-Generic evaluation datasets borrowed from other domains are a poor fit for public health RAG. Epidemiological text has domain-specific failure modes — study-scoped language, implicit population references, near-duplicate statistics across papers — that require targeted prompt engineering and filtering to produce meaningful evaluation questions. The multi-stage quality pipeline here (diversity constraints → standalone filter → critique → deduplication) addresses each of these systematically.
+**The paper’s generic prompts did not work out of the box.** Adapting them to the epidemiological domain required targeted prompt engineering to handle study-scoped language, implicit population references, and biostatistics jargon. Without these adaptations, the LLM produces questions that sound plausible but fail the standalone and groundedness criteria.
 
+**Section-aware splitting matters.** Using an HTML splitter that respects document headings avoids splitting paragraphs mid-sentence and prevents content from unrelated sections from mixing in the same chunk. Section-complete chunks are large enough to extract multiple statements and generate coherent questions — and they make it straightforward for domain experts to guide which sections are worth sampling.
+
+**Building an evaluation dataset is a project in itself.** It requires careful, domain-specific prompt design, LLM critique, and, if possible, human expert review. For a large and diverse dataset, it is also compute-intensive and expensive: question generation, LLM-as-judge critique, and running tests across multiple RAG architectures each incur LLM costs.
 
 ### Limitations
 
