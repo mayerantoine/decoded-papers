@@ -3,6 +3,8 @@ import { slugifyStr } from "@/utils/slugify";
 import type { CollectionEntry } from "astro:content";
 import { getPath } from "@/utils/getPath";
 import Datetime from "./Datetime.astro";
+import FeelbackPulse from "astro-feelback/components/FeelbackPulse.astro";
+import "astro-feelback/styles/feelback.css";
 
 export interface Props extends CollectionEntry<"blog"> {
   variant?: "h2" | "h3";
@@ -31,6 +33,14 @@ const headerProps = {
       )
     }
   </a>
-  <Datetime {pubDatetime} {modDatetime} {timezone} />
+  <div class="flex items-center gap-3">
+    <Datetime {pubDatetime} {modDatetime} {timezone} />
+    <FeelbackPulse
+      contentSetId="bfe7aa4d-912a-48ad-aa6b-4a1b0ab89419"
+      key={id}
+      preset="heart"
+      showCount
+    />
+  </div>
   <p>{description}</p>
 </li>
