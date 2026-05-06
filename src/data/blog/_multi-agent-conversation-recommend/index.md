@@ -1,10 +1,10 @@
 ---
 author: Mayer Antoine
-pubDatetime: 2026-04-15
-modDatetime: 2026-04-15
+pubDatetime: 2026-05-06
+modDatetime: 2026-05-06
 title: Lessons Learned from Implementing a Multi-Agent Conversational Recommender System (MACRS)
 slug: lessons-learned-multi-agent-conversational-recommender-system
-draft: True
+draft: False
 tags:
   - multi-agent
   - Agent
@@ -19,11 +19,11 @@ description: Implement a Multi-Agent Conversational Recommender System (MACRS) u
 
 ## Table of contents
 
-## Multi-agent conversational recommender system(MACRS)
+## Multi-agent conversational recommender system (MACRS)
 
-Last year, while researching recommendation systems, I came across a 2024 paper by Fang, Jiabao et al. titled “A Multi-Agent Conversational Recommender System.” After reading it and reviewing the citations, references, and similar papers, I realized the multi-agent approach was not unique. However, the architecture still intrigued me. After implementing MACRS, I realized the real value lay in the diverse patterns it uses and the lessons we can learn from this kind of agentic design.
+This post walks through a working implementation of MACRS — a Multi-Agent Conversational Recommender System — and extracts the agentic patterns and engineering lessons that generalize far beyond recommendation. The full implementation is available on [GitHub](https://github.com/mayerantoine/macrs).
 
-In this post, I explain the MACRS multi-agent architecture, describe how I implemented it using the OpenAI Agent SDK, compare it with common agentic patterns, and share the lessons and ideas I extracted and plan to apply to other agent designs. The full implementation is available on [GitHub](https://github.com/mayerantoine/macrs).
+The starting point was a 2024 paper by Fang, Jiabao et al. I came across it while researching recommendation systems and, after reading the citations and similar work, realized the multi-agent approach wasn't unique. But the architecture intrigued me enough to build it — and implementing it is where the real learning happened.
 
 **What you will learn:**
 
@@ -34,23 +34,28 @@ In this post, I explain the MACRS multi-agent architecture, describe how I imple
 5. How to use Pydantic structured output (`output_type`, `response_format`) for safe agent communication
 6. Key agentic patterns: hub-and-spoke, multi-agent act planning, and feedback loops
 
-## About Conversation Recommendation System(CRS)
+## About Conversation Recommendation System (CRS)
 
-First Let’s start by framing the recommendation problem. We encounter recommendations everywhere: e-commerce, streaming platforms, and even a street vendor suggesting what to buy. Broadly, recommender systems fall into two types:
+First, let’s start by framing the recommendation problem. We encounter recommendations everywhere: e-commerce, streaming platforms, and even a street vendor suggesting what to buy. Broadly, recommender systems fall into two types:
 
-**Sequential Recommendation** : "What you'll probably want next based on your recent actions"- Predicts what you will want next from your recent actions (clicks, views, purchases), modeled as a time-ordered sequence using RNNs, LSTMs, Transformers, or session-based methods.
+**Sequential Recommendation**: "What you'll probably want next based on your recent actions"- Predicts what you will want next from your recent actions (clicks, views, purchases), modeled as a time-ordered sequence using RNNs, LSTMs, Transformers, or session-based methods.
 
-**Conversational Recommendation** :"Having a back-and-forth chat to figure out exactly what you want" :Uses multi-turn dialogue to elicit preferences, ask clarifying questions, and refine suggestions based on feedback and context. Incorporates dialogue management, natural language understanding, and interactive preference learning.
+**Conversational Recommendation**: "Having a back-and-forth chat to figure out exactly what you want" :Uses multi-turn dialogue to elicit preferences, ask clarifying questions, and refine suggestions based on feedback and context. Incorporates dialogue management, natural language understanding, and interactive preference learning.
 
-Although sequential models learn from history, but they often miss what matters right now: mood, today’s context, or a friend’s suggestion. That gap is why recent systems pair LLMs with conversational recommender systems (CRS) to surface ambiguous needs through natural language and produce better-tailored recommendations.
+Although sequential models learn from history, they often miss what matters right now: mood, today’s context, or a friend’s suggestion. That gap is why recent systems pair LLMs with conversational recommender systems (CRS) to surface ambiguous needs through natural language and produce better-tailored recommendations.
 
-Existing CRS typically fall into two camps. **Attribute-based** systems ask users yes or no questions about item attributes and respond with templates  but they are rigid: users cannot ask open-ended questions, and the system is limited to hand-written replies. **Generation-based** systems aim for more natural dialogue but many rely on predefined knowledge graphs or smaller generative models, which limits generalization and makes real-world deployment difficult.
+Existing CRS typically fall into two camps. **Attribute-based** systems ask users yes or no questions about item attributes and respond with templates, but they are rigid: users cannot ask open-ended questions, and the system is limited to hand-written replies. **Generation-based** systems aim for more natural dialogue but many rely on predefined knowledge graphs or smaller generative models, which limits generalization and makes real-world deployment difficult.
 
 MACRS relies on LLMs and multi-agent planning and memory to generate natural dialogue with the user. More importantly, ***this is an LLM-only framework in the sense that it does not use an external system to retrieve recommendations.*** Instead, recommendations come from the LLM’s static memory. This contrasts with CRS approaches that pair an LLM with an external recommender system. In the paper, the use case is movie recommendations. Given a user query for a movie, MACRS aims to provide a successful recommendation, limited by the LLM knowledge cutoff. The system guides the conversation by eliciting user preferences through chat, asking clarifying questions, maintaining a user profile, and learning from recommendation rejections and follow-up clarification.
 
+With that framing in place, let's look at how MACRS is actually built.
+
 ## Architecture and Implementation
 
-MACRS (Multi-Agent Conversational Recommender System) is an LLM-only conversational recommender that merges two modules: **multi-agent act planning** and **user feedback-aware reflection**. Together they form a continuous improvement cycle.
+MACRS (Multi-Agent Conversational Recommender System) is an LLM-only conversational recommender that merges two modules: **multi-agent act planning** and **user feedback-aware reflection**. Together they form a continuous improvement cycle. Figure below from the paper shows the overall flow of the architecture.
+
+![MACRS Paper figure](./images/macrs_paper.png)
+*The paper's architecture diagram: responders run in parallel (left), the planner selects the best act (center), and rejection triggers reflection that updates both the user profile and the strategy for the next turn (right).*
 
 #### **Module 1 — Multi-Agent Act Planning**
 
@@ -72,6 +77,27 @@ A dynamic optimization mechanism that runs in two layers after each turn:
 **Information-level reflection** Runs every turn. Reads the user's utterances and infers updated preferences — browsing history, current demand — and consolidates them into a **user profile**. This profile is injected into every subsequent agent call to personalise responses.
 
 **Strategy-level reflection** Fires only when a recommendation is rejected. Reasons about *why* the recommendation failed, produces a diagnosis, and writes a **strategy suggestion** that guides the planner's act selection in the next turn.
+
+### Memory
+
+All agents — both the responder agents and the planner — share state through a single dataclass called `AgentsModule`. This is the "working memory" of the system for a given turn.
+
+```python
+# memory_context.py
+
+@dataclass
+class AgentsModule:
+    turn_count: int = 0
+    dialogue_act_history: List[str] = field(default_factory=list)
+    user_profile: Optional[UserProfile] = None
+    dialogue_history: List = field(default_factory=list)
+    strategy_suggestion: Optional[Suggestions] = field(default_factory=Suggestions)
+    asking_agent_response: str = ""
+    chitchat_agent_response: str = ""
+    recommending_agent_response: str = ""
+```
+
+**What to learn here**: in multi-agent systems, agents need to share state. The OpenAI Agents SDK uses a `RunContextWrapper[T]` generic to pass a typed context object into each agent's instruction function. This pattern avoids global variables and makes dependencies explicit.
 
 ### **The Four Agents and Their Roles**
 
@@ -306,29 +332,26 @@ async def gather_agents_reponses(ask_question_agent, chat_agent, recommender_age
 ```
 
 **What to learn here**: when agents are independent (no output of one feeds into another), run them in parallel. This cuts latency by ~3x compared to sequential calls. The OpenAI Agents SDK's `Runner.run()` is a coroutine, so it plugs directly into `asyncio`.
+![Per-turn execution sequence](./images/per_turn_sequence.png) 
+*Per-turn execution sequence: feedback classification gates the pipeline, three responders run in parallel via `asyncio.gather()`, the planner selects the winning response, and strategy reflection fires only on rejection.*
 
-### Memory
+### **Feedback Classification**
 
-All agents — both the responder agents and the planner — share state through a single dataclass called `AgentsModule`. This is the "working memory" of the system for a given turn.
+Before any of the above logic runs, the system classifies the user's response to the previous turn:
 
 ```python
-# memory_context.py
-
-@dataclass
-class AgentsModule:
-    turn_count: int = 0
-    dialogue_act_history: List[str] = field(default_factory=list)
-    user_profile: Optional[UserProfile] = None
-    dialogue_history: List = field(default_factory=list)
-    strategy_suggestion: Optional[Suggestions] = field(default_factory=Suggestions)
-    asking_agent_response: str = ""
-    chitchat_agent_response: str = ""
-    recommending_agent_response: str = ""
+classify_recommendation_outcome(user_input, system_response)
+→ ClassifyFeedback(decision="ACCEPT" | "REJECT" | "FEEDBACK" | "UNCLEAR")
 ```
 
-**What to learn here**: in multi-agent systems, agents need to share state. The OpenAI Agents SDK uses a `RunContextWrapper[T]` generic to pass a typed context object into each agent's instruction function. This pattern avoids global variables and makes dependencies explicit.
+- **ACCEPT** → end the conversation gracefully
+- **REJECT** → trigger error analysis + strategy reflection
+- **FEEDBACK / UNCLEAR** → continue normally, just update the profile
 
-### Learning
+This gate controls whether the expensive reflection pipeline runs. It also prevents the system from continuing a conversation the user has already ended positively.
+
+
+### Reflection and Learning
 
 #### **Information-Level Reflection**
 
@@ -369,52 +392,19 @@ The `_avoidance` suffix convention (e.g., `director_avoidance`, `tone_avoida
 
 **What to learn here**: use `response_format=PydanticModel` (the `parse` API) instead of free-text generation whenever you need structured data from an LLM. It eliminates fragile JSON parsing and guarantees you get a typed Python object.
 
----
 
 #### **Error-Driven Strategy Reflection**
 
 When the user rejects a recommendation, the system doesn't just try again — it **analyzes why** ***and generates corrective guidance for all agents***:
 
-```
-User rejects recommendation
-         │
-         ▼
-run_error_summary(trajectory)
-  → "We recommended Predator which was already in browsing_history.
-     We failed to check seen films before recommending."
-         │
-         ▼
-run_strategy_suggestion(error_summary)
-  → Suggestions(
-      for_recommender_agent = "Check browsing_history first. Try Eraser (Chuck Russell).",
-      for_asking_agent      = "Ask about specific directors user hasn't seen.",
-      for_chitchat_agent    = "Explore 90s era films more deeply.",
-      for_planning_agent    = "Wait for 3+ confirmed attributes before recommending again."
-    )
-         │
-         ▼
-Stored in agent_module.strategy_suggestion
-→ Available to ALL agents on the next turn via their instructions
-```
+![Per-turn Reflection Strategy](./images/reflection_strategy.png) 
 
 This is the "reflective" component of MACRS. The `Trajectory` (a list of `Turn` objects capturing profile + system response + user feedback) is the input to error analysis.
 
 **What to learn here**: r***eflection loops are a powerful pattern in agentic systems. By giving the system a way to analyze its own failures and inject corrective guidance back into agent prompts***, you get a form of in-context learning without fine-tuning. The key implementation detail is that `Suggestions` has one field per agent — each agent only sees its own relevant guidance.
 
-### **Feedback Classification**
-
-Before any of the above logic runs, the system classifies the user's response to the previous turn:
-
-```python
-classify_recommendation_outcome(user_input, system_response)
-→ ClassifyFeedback(decision="ACCEPT" | "REJECT" | "FEEDBACK" | "UNCLEAR")
-```
-
-- **ACCEPT** → end the conversation gracefully
-- **REJECT** → trigger error analysis + strategy reflection
-- **FEEDBACK / UNCLEAR** → continue normally, just update the profile
-
-This gate controls whether the expensive reflection pipeline runs. It also prevents the system from continuing a conversation the user has already ended positively.
+![Two-memory architecture](./images/two_memory_arch.png)
+*Two distinct memory stores: `UserProfile` captures what the user wants (updated every turn), while `Suggestions` captures how agents should behave (updated only on rejection). Separating these prevents behavioral guidance from polluting preference data.*
 
 ## Architectural insights and lessons learned
 
@@ -424,18 +414,9 @@ This approach contrasts with a single-orchestrator architecture managing the dia
 
 ### **Cognitive Behaviors**
 
-The table below of cognitive behaviours identified in MACRS.
+The table below shows the cognitive behaviours identified in MACRS.
+![Per-turn execution sequence](./images/cognitive_table.png) 
 
-| Behaviour | Description |
-| --- | --- |
-| Task decomposition | Complex CRS task split into specialised cognitive sub-tasks |
-| Role specialization | Each agent has a distinct dialogue act and reasoning scope |
-| Cooperative planning | Planner orchestrates responders toward a shared goal |
-| Dialogue flow control | Explicit per-turn act planning, not open-ended generation |
-| User preference modeling | Continuous extraction and updating of user profiles |
-| Error reflection | Reasoning over past failures to adjust future strategy |
-| Dynamic adaptation | Strategy-level reflection recalibrates the plan after rejection |
-| Multi-turn memory | Dialogue history and user profile carried forward across turns |
 
 ### **Agentic Patterns Used**
 
@@ -447,48 +428,29 @@ The **Planner** is the hub. The three **Responders** are spokes. All three s
 
 This is **not routing** (routing sends traffic to one agent or another). This is fan-out + aggregation.
 
-```
-Ask Responder   ──┐
-                  ├──► Planner Agent ──► Final response
-Chit-chat Resp  ──┤
-                  │
-Rec Responder   ──┘
-```
+![Fan-out vs routing](./images/fan-out-pattern.png)
 
-#### **Pattern 2 —** multi-agent act planning **(within a single turn)**
+#### **Pattern 2 — Multi-Agent Act Planning (within a single turn)**
 
 Layered on top of hub-and-spoke, every turn has two sequential phases:
 
 1. **Plan** — Planner reads dialogue history + user profile + strategy hint and decides which act is appropriate
-2. **Execute** — The winning responder produces the actual response
+2. **Execute** — The planner selects one of the three already-generated candidate responses
 
 ***The planner never generates content***. It only reasons about which kind of content should be generated. These are separate LLM calls with distinct prompts and responsibilities.
 
 #### **Pattern 3 — Feedback Loop / Reflection Loop (across turns)**
 
 Zooming out to the full conversation, MACRS runs a persistent loop between turns:
-
-```
-Turn N response
-    │
-    ▼
-User reacts (accept / reject)
-    │
-    ├──► Info reflection ──► Updated user profile
-    │
-    └──► Strategy reflection (on rejection) ──► New strategy hint
-                                                      │
-                                                      ▼
-                                              Injected into Turn N+1 plan
-```
+![Turn Loop](./images/turn-loop.png)
 
 This is what distinguishes MACRS from a simple plan-and-execute: execution outcomes change the plan of the *next* cycle. This is the **self-correction** loop pattern.
+
+These three patterns — hub-and-spoke, act planning, and feedback loops — point directly to practical engineering lessons.
 
 ## **Lessons for AI Engineers**
 
 These lessons generalise beyond recommender systems to any agentic system.
-
----
 
 - **Decompose by cognitive role** (eliciting vs engaging vs recommending vs planning), not by data type.
 - **Separate generation from selection** (responders draft; planner chooses) to reduce self-evaluation bias.

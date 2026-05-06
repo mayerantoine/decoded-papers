@@ -14,8 +14,6 @@ import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
 import { SITE } from "@/config";
-import FeelbackPulse from "astro-feelback/components/FeelbackPulse.astro";
-import "astro-feelback/styles/feelback.css";
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -101,19 +99,16 @@ const nextPost =
     >
       {title}
     </h1>
-    <div class="my-2 flex items-center justify-between gap-2">
-      <div class="flex items-center gap-2">
-        <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
-        <span
-          aria-hidden="true"
-          class:list={[
-            "max-sm:hidden",
-            { hidden: !SITE.editPost.enabled || hideEditPost },
-          ]}>|</span
-        >
-        <EditPost {hideEditPost} {post} class="max-sm:hidden" />
-      </div>
-      <FeelbackPulse contentSetId="bfe7aa4d-912a-48ad-aa6b-4a1b0ab89419" preset="heart" showCount />
+    <div class="my-2 flex items-center gap-2">
+      <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
+      <span
+        aria-hidden="true"
+        class:list={[
+          "max-sm:hidden",
+          { hidden: !SITE.editPost.enabled || hideEditPost },
+        ]}>|</span
+      >
+      <EditPost {hideEditPost} {post} class="max-sm:hidden" />
     </div>
 
     <article
@@ -126,11 +121,6 @@ const nextPost =
     <aside class="mx-auto mt-6 max-w-app rounded border border-dashed px-4 py-3 text-sm italic opacity-70">
       Disclaimer: The findings and conclusions in this report are those of the authors and do not represent the position of their employers.
     </aside>
-
-    <div class="mt-6 flex items-center gap-3">
-      <span class="text-sm opacity-60">Found this useful?</span>
-      <FeelbackPulse contentSetId="bfe7aa4d-912a-48ad-aa6b-4a1b0ab89419" preset="heart" showCount />
-    </div>
 
     <hr class="my-8 border-dashed" />
 
