@@ -2,7 +2,7 @@
 author: Mayer Antoine
 pubDatetime: 2026-05-06
 modDatetime: 2026-05-06
-title: Lessons Learned from Implementing a Multi-Agent Conversational Recommender System (MACRS)
+title: Multi-Agent Conversational Recommender System: Agentic Patterns with OpenAI Agents SDK
 slug: lessons-learned-multi-agent-conversational-recommender-system
 draft: False
 tags:
@@ -14,7 +14,7 @@ tags:
   - reflection loop
   - recommender system
   - Python
-description: Implement a Multi-Agent Conversational Recommender System (MACRS) using the OpenAI Agents SDK — hub-and-spoke planning, parallel agent execution, and self-correcting reflection loops for conversational movie recommendations.
+description: Build a multi-agent conversational recommender system using agentic design patterns — hub-and-spoke orchestration, parallel agent execution, and reflection loops with the OpenAI Agents SDK.
 ---
 
 ## Table of contents
