@@ -5,6 +5,7 @@ export const SITE = {
   desc: "Hands-on implementations of AI/ML research papers — RAG systems, agentic workflows, NLP, and LLM techniques with code and tutorials.",
   title: "DecodedPapers",
   ogImage: "astropaper-og.jpg",
+  twitterHandle: "", // e.g. "@decodedpapers" — leave empty to omit twitter:site tag
   lightAndDarkMode: true,
   postPerIndex: 10,
   postPerPage: 4,

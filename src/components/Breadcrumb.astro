@@ -1,4 +1,6 @@
 ---
+import { SITE } from "@/config";
+
 // Remove current url path and remove trailing slash if exists
 const currentUrlPath = Astro.url.pathname.replace(/\/+$/, "");
 
@@ -21,6 +23,26 @@ if (breadcrumbList[0] === "tags" && !isNaN(Number(breadcrumbList[2]))) {
     `${breadcrumbList[1]} ${Number(breadcrumbList[2]) === 1 ? "" : "(page " + breadcrumbList[2] + ")"}`
   );
 }
+
+// Build BreadcrumbList schema using the raw (pre-splice) path segments
+// so URLs are correct absolute paths, unaffected by the display mutations above.
+const rawSegments = currentUrlPath.split("/").filter(Boolean);
+
+const schemaItems = [
+  { "@type": "ListItem", position: 1, name: "Home", item: SITE.website },
+  ...rawSegments.map((segment, index) => ({
+    "@type": "ListItem",
+    position: index + 2,
+    name: decodeURIComponent(segment),
+    item: `${SITE.website}/${rawSegments.slice(0, index + 1).join("/")}`,
+  })),
+];
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: schemaItems,
+};
 ---
 
 <nav class="mx-auto mt-8 mb-1 w-full max-w-app px-4" aria-label="breadcrumb">
@@ -55,3 +77,5 @@ if (breadcrumbList[0] === "tags" && !isNaN(Number(breadcrumbList[2]))) {
     }
   </ul>
 </nav>
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />

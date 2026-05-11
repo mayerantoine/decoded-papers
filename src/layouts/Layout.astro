@@ -14,6 +14,7 @@ export interface Props {
   pubDatetime?: Date;
   modDatetime?: Date | null;
   scrollSmooth?: boolean;
+  tags?: string[];
 }
 
 const {
@@ -26,25 +27,54 @@ const {
   pubDatetime,
   modDatetime,
   scrollSmooth = false,
+  tags = [],
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.url);
 
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  headline: `${title}`,
-  image: `${socialImageURL}`,
-  datePublished: `${pubDatetime?.toISOString()}`,
-  ...(modDatetime && { dateModified: modDatetime.toISOString() }),
-  author: [
-    {
-      "@type": "Person",
-      name: `${author}`,
-      ...(profile && { url: profile }),
-    },
-  ],
-};
+const logoURL = new URL(
+  SITE.ogImage ? `/${SITE.ogImage}` : "/og.png",
+  SITE.website
+).href;
+
+const isArticle = pubDatetime !== undefined;
+
+const structuredData = isArticle
+  ? {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: title,
+      url: String(canonicalURL),
+      mainEntityOfPage: { "@type": "WebPage", "@id": String(canonicalURL) },
+      image: socialImageURL.href,
+      datePublished: pubDatetime.toISOString(),
+      ...(modDatetime && { dateModified: modDatetime.toISOString() }),
+      author: [
+        {
+          "@type": "Person",
+          name: author,
+          ...(profile && { url: profile }),
+        },
+      ],
+      publisher: {
+        "@type": "Organization",
+        name: SITE.title,
+        logo: { "@type": "ImageObject", url: logoURL },
+      },
+      ...(tags.length > 0 && { keywords: tags.join(", ") }),
+    }
+  : {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      url: SITE.website,
+      name: SITE.title,
+      description: SITE.desc,
+      publisher: {
+        "@type": "Organization",
+        name: SITE.title,
+        logo: { "@type": "ImageObject", url: logoURL },
+      },
+    };
 ---
 
 <!doctype html>
@@ -68,10 +98,19 @@ const structuredData = {
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:type" content={isArticle ? "article" : "website"} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:image" content={socialImageURL} />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageURL} />
+    {SITE.twitterHandle && <meta name="twitter:site" content={SITE.twitterHandle} />}
 
     <!-- Article Published/Modified time -->
     {
