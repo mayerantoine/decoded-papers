@@ -2,7 +2,7 @@
 author: Mayer Antoine
 pubDatetime: 2026-05-06
 modDatetime: 2026-05-06
-title: Multi-Agent Conversational Recommender System: Agentic Patterns with OpenAI Agents SDK
+title: "Multi-Agent Conversational Recommender System: Agentic Patterns with OpenAI Agents SDK"
 slug: lessons-learned-multi-agent-conversational-recommender-system
 draft: False
 tags:
