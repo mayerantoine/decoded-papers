@@ -96,7 +96,7 @@ const nextPost =
   >
     <h1
       transition:name={slugifyStr(title)}
-      class="inline-block text-2xl font-bold text-accent sm:text-3xl"
+      class="inline-block font-serif text-2xl font-bold text-foreground sm:text-3xl"
     >
       {title}
     </h1>
@@ -291,4 +291,39 @@ const nextPost =
   document.addEventListener("astro:after-swap", () =>
     window.scrollTo({ left: 0, top: 0, behavior: "instant" })
   );
+
+  /** Highlight the active TOC link as user scrolls */
+  function initTocScrollSpy() {
+    const tocLinks = Array.from(
+      document.querySelectorAll("#table-of-contents ~ details a")
+    );
+    if (!tocLinks.length) return;
+
+    const headingIds = tocLinks
+      .map(a => a.getAttribute("href")?.slice(1))
+      .filter(Boolean);
+
+    const headingEls = headingIds
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          const id = entry.target.getAttribute("id");
+          const link = tocLinks.find(a => a.getAttribute("href") === `#${id}`);
+          if (entry.isIntersecting) {
+            tocLinks.forEach(a => a.classList.remove("toc-active"));
+            link?.classList.add("toc-active");
+          }
+        });
+      },
+      { rootMargin: "0px 0px -70% 0px", threshold: 0 }
+    );
+
+    headingEls.forEach(el => observer.observe(el));
+  }
+
+  initTocScrollSpy();
+  document.addEventListener("astro:after-swap", initTocScrollSpy);
 </script>

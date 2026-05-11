@@ -1,5 +1,4 @@
 ---
-import Hr from "./Hr.astro";
 import IconX from "@/assets/icons/IconX.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
@@ -23,7 +22,7 @@ const isActive = (path: string) => {
 };
 ---
 
-<header>
+<header class="border-b border-border">
   <a
     id="skip-to-content"
     href="#main-content"
@@ -41,7 +40,7 @@ const isActive = (path: string) => {
     >
       <a
         href="/"
-        class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
+        class="absolute py-1 font-serif text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
       >
         {SITE.title}
       </a>
@@ -137,7 +136,6 @@ const isActive = (path: string) => {
       </nav>
     </div>
   </div>
-  <Hr />
 </header>
 
 <script>

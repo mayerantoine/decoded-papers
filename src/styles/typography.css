@@ -11,6 +11,7 @@
     h4,
     th {
       @apply mb-3 text-foreground;
+      font-family: 'Lora', Georgia, serif;
     }
 
     h3 {
@@ -44,11 +45,11 @@
     }
 
     img {
-      @apply mx-auto border border-border;
+      @apply mx-auto my-6 max-w-full rounded-lg border border-border shadow-md;
     }
 
     figcaption {
-      @apply opacity-75;
+      @apply mt-2 text-center text-sm italic opacity-60;
     }
 
     table {
@@ -88,6 +89,57 @@
 
     pre {
       @apply focus-visible:border-transparent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-dashed;
+    }
+
+    /* ===== Table of Contents ===== */
+    /* remark-toc + remark-collapse renders: h2#table-of-contents + details > summary + ul */
+    #table-of-contents {
+      font-family: 'Inter', system-ui, sans-serif;
+      @apply mb-1 text-xs font-semibold uppercase tracking-widest opacity-50;
+    }
+
+    #table-of-contents ~ details {
+      @apply mt-0 rounded-lg border border-border bg-[var(--subtle)] px-5 py-4 text-sm;
+      /* override the details hide-all rule set elsewhere */
+      display: block !important;
+      cursor: default;
+
+      p {
+        display: none;
+      }
+
+      summary {
+        @apply mb-2 cursor-pointer text-xs font-semibold uppercase tracking-widest opacity-50;
+        list-style: none;
+      }
+
+      summary::-webkit-details-marker {
+        display: none;
+      }
+
+      ul {
+        @apply mt-0;
+        list-style: none;
+        padding-left: 0;
+
+        li {
+          @apply my-1 marker:content-none;
+        }
+
+        a {
+          @apply text-foreground no-underline opacity-75 hover:text-accent hover:opacity-100;
+          transition: color 0.15s, opacity 0.15s;
+        }
+
+        a.toc-active {
+          @apply font-medium text-accent opacity-100;
+        }
+
+        /* nested lists */
+        ul {
+          @apply mt-1 border-l border-border pl-3;
+        }
+      }
     }
   }
 
