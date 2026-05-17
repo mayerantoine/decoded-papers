@@ -12,6 +12,7 @@ import IconRss from "@/assets/icons/IconRss.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import { SITE } from "@/config";
 import { SOCIALS } from "@/constants";
+import NewsletterSignup from "@/components/NewsletterSignup.astro";
 
 const posts = await getCollection("blog");
 
@@ -102,6 +103,9 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
         <IconArrowRight class="inline-block rtl:-rotate-180" />
       </LinkButton>
     </div>
+
+    <Hr />
+    <NewsletterSignup />
   </main>
   <Footer />
 </Layout>

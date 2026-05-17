@@ -9,6 +9,7 @@ import EditPost from "@/components/EditPost.astro";
 import ShareLinks from "@/components/ShareLinks.astro";
 import BackButton from "@/components/BackButton.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
+import NewsletterSignup from "@/components/NewsletterSignup.astro";
 import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
@@ -118,6 +119,8 @@ const nextPost =
     >
       <Content />
     </article>
+
+    <NewsletterSignup />
 
     <aside class="mx-auto mt-6 max-w-app rounded border border-dashed px-4 py-3 text-sm italic opacity-70">
       Disclaimer: The findings and conclusions in this report are those of the authors and do not represent the position of their employers.
