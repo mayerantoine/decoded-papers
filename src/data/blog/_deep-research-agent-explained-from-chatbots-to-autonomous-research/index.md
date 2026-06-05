@@ -260,65 +260,65 @@ The agent gathers. The human decides. That partnership, properly structured, may
 **Final Thought**
 The Deep Research Agent is best understood not as artificial intelligence replacing human intelligence, but as a new kind of research infrastructure — like the library, or the internet, or the scientific journal — that expands the range of questions that humans can pursue and the speed at which they can pursue them. The questions themselves, and what to do with the answers, remain irreducibly human.
 
-Here are the specific sources referenced in the report, organised by category, with links where available.
+## References
 
 ### Academic Papers & Preprints (arXiv)
 
 **Deep Research Agents: A Systematic Examination and Roadmap**
-Huang et al., 2025
-[https://arxiv.org/abs/2506.18096](https://arxiv.org/abs/2506.18096)
+Huang et al., arXiv, 2025
+[Read →](https://arxiv.org/abs/2506.18096)
 
 **A Comprehensive Survey of Deep Research: Systems, Methodologies, and Applications**
-Xu & Peng, Zhejiang University, 2025
-[https://arxiv.org/abs/2506.12594](https://arxiv.org/abs/2506.12594)
+Xu & Peng, Zhejiang University, arXiv, 2025
+[Read →](https://arxiv.org/abs/2506.12594)
 
 **Deep Research of Deep Research: From Transformer to Agent, From AI to AI for Science**
-2026
-[https://arxiv.org/abs/2603.28361](https://arxiv.org/abs/2603.28361)
+arXiv, 2026
+[Read →](https://arxiv.org/abs/2603.28361)
 
 **DeepResearcher: Scaling Deep Research via Reinforcement Learning in Real-world Environments**
-Zheng et al., 2025
-[https://arxiv.org/abs/2504.03160](https://arxiv.org/abs/2504.03160)
+Zheng et al., arXiv, 2025
+[Read →](https://arxiv.org/abs/2504.03160)
 
-**A Hierarchical Tree-based approach for creating Configurable and Static Deep Research Agent (Static-DRA)**
-Prateek, Google, December 2025
-[https://arxiv.org/abs/2512.03887](https://arxiv.org/abs/2512.03887)
+**A Hierarchical Tree-based Approach for Creating Configurable and Static Deep Research Agent (Static-DRA)**
+Prateek, Google, arXiv, December 2025
+[Read →](https://arxiv.org/abs/2512.03887)
 
 **MA-RAG: Multi-Agent Retrieval-Augmented Generation via Collaborative Chain-of-Thought Reasoning**
-Nguyen et al., 2025
-[https://arxiv.org/abs/2505.20096](https://arxiv.org/abs/2505.20096)
+Nguyen et al., arXiv, 2025
+[Read →](https://arxiv.org/abs/2505.20096)
 
 **Agentic Retrieval-Augmented Generation: A Survey on Agentic RAG**
-Ehtesham et al., 2025–2026
-[https://arxiv.org/abs/2501.09136](https://arxiv.org/abs/2501.09136)
+Ehtesham et al., arXiv, 2025–2026
+[Read →](https://arxiv.org/abs/2501.09136)
 
 **Why Your Deep Research Agent Fails? On Hallucination Evaluation in Full Research Trajectory**
-Zhan et al., January 2026
-[https://arxiv.org/abs/2601.22984](https://arxiv.org/abs/2601.22984)
+Zhan et al., arXiv, January 2026
+[Read →](https://arxiv.org/abs/2601.22984)
 
 **Rethinking the AI Scientist: Interactive Multi-Agent Workflows for Scientific Discovery**
-2026
-[https://arxiv.org/abs/2601.12542](https://arxiv.org/abs/2601.12542)
+arXiv, 2026
+[Read →](https://arxiv.org/abs/2601.12542)
 
 **AgentSLR: Automating Systematic Literature Reviews in Epidemiology with Agentic AI**
-2026
-[https://arxiv.org/abs/2603.22327](https://arxiv.org/abs/2603.22327)
+arXiv, 2026
+[Read →](https://arxiv.org/abs/2603.22327)
 
 **AI Agents in Drug Discovery**
-2025
-[https://arxiv.org/abs/2510.27130](https://arxiv.org/abs/2510.27130)
+arXiv, 2025
+[Read →](https://arxiv.org/abs/2510.27130)
 
 **Reasoning RAG via System 1 or System 2: A Survey on Reasoning Agentic Retrieval-Augmented Generation for Industry Challenges**
-2025
-[https://arxiv.org/abs/2506.10408](https://arxiv.org/abs/2506.10408)
+arXiv, 2025
+[Read →](https://arxiv.org/abs/2506.10408)
 
 ---
 
 ### Government & Public Health Institutions
 
 **Considerations for Agentic Research in Public Health**
-CDC, March 12, 2026 — *The primary CDC guidance document referenced throughout the Public Health chapter*
-[https://www.cdc.gov/ai/resources/considerations-for-agentic-research-in-public-health.html](https://www.cdc.gov/ai/resources/considerations-for-agentic-research-in-public-health.html)
+CDC, March 12, 2026
+[Read →](https://www.cdc.gov/ai/resources/considerations-for-agentic-research-in-public-health.html)
 
 ---
 
@@ -326,79 +326,80 @@ CDC, March 12, 2026 — *The primary CDC guidance document referenced throughout
 
 **Deep Research Agents: Major Breakthrough or Incremental Progress for Medical AI?**
 Journal of Medical Internet Research (JMIR), March 26, 2026
-[https://www.jmir.org/2026/1/e88195](https://www.jmir.org/2026/1/e88195)
+[Read →](https://www.jmir.org/2026/1/e88195)
 
-**Artificial intelligence and infectious diseases: an evidence-driven conceptual framework for research, public health, and clinical practice**
+**Artificial Intelligence and Infectious Diseases: An Evidence-Driven Conceptual Framework for Research, Public Health, and Clinical Practice**
 The Lancet Infectious Diseases, September 2025
-[https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(25)00412-8/abstract](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(25)00412-8/abstract)
+[Read →](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(25)00412-8/abstract)
 
 **AI-Driven Epidemiology: The Next Frontier in Precision Public Health**
 Prema, WIREs Data Mining and Knowledge Discovery, Wiley, 2026
-[https://wires.onlinelibrary.wiley.com/doi/10.1002/widm.70077](https://wires.onlinelibrary.wiley.com/doi/10.1002/widm.70077)
+[Read →](https://wires.onlinelibrary.wiley.com/doi/10.1002/widm.70077)
 
 **Harnessing Artificial Intelligence for Enhanced Public Health Surveillance: A Narrative Review**
 Frontiers in Public Health, July 2025
-[https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2025.1601151/full](https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2025.1601151/full)
+[Read →](https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2025.1601151/full)
 
 **Artificial Intelligence in Early Warning Systems for Infectious Disease Surveillance: A Systematic Review**
 Frontiers in Public Health, June 2025
-[https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2025.1609615/full](https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2025.1609615/full)
+[Read →](https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2025.1609615/full)
 
 **Artificial Intelligence in Epidemic Watch: Revolutionizing Infectious Diseases Surveillance**
 Frontiers in Digital Health, December 2025
-[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12711821/](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12711821/)
+[Read →](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12711821/)
 
 **The Role and Limitations of Artificial Intelligence in Combating Infectious Disease Outbreaks**
 Cureus, January 2025
-[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11800715/](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11800715/)
+[Read →](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11800715/)
 
 **Agentic AI and Large Language Models in Radiology: Opportunities and Hallucination Challenges**
-2025
-[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12729288/](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12729288/)
+PMC, 2025
+[Read →](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12729288/)
 
 **A State-of-the-Art Review of AI Applications in Healthcare: Advances in Diabetes, Cancer, Epidemiology, and Mortality Prediction**
 Computers, MDPI, April 2025
-[https://www.mdpi.com/2073-431X/14/4/143](https://www.mdpi.com/2073-431X/14/4/143)
+[Read →](https://www.mdpi.com/2073-431X/14/4/143)
 
 ---
 
 ### Industry & Technology Sources
 
 **Deep Research Max: A Step Change for Autonomous Research Agents**
-Google DeepMind Blog, April 21, 2026 — *The announcement of Deep Research and Deep Research Max on Gemini 3.1 Pro*
-[https://blog.google/innovation-and-ai/models-and-research/gemini-models/next-generation-gemini-deep-research/](https://blog.google/innovation-and-ai/models-and-research/gemini-models/next-generation-gemini-deep-research/)
+Google DeepMind Blog, April 21, 2026
+[Read →](https://blog.google/innovation-and-ai/models-and-research/gemini-models/next-generation-gemini-deep-research/)
 
 **Deep Research Max Preview — Gemini API Documentation**
 Google AI for Developers, April 21, 2026
-[https://ai.google.dev/gemini-api/docs/models/deep-research-max-preview-04-2026](https://ai.google.dev/gemini-api/docs/models/deep-research-max-preview-04-2026)
+[Read →](https://ai.google.dev/gemini-api/docs/models/deep-research-max-preview-04-2026)
 
 **Google's New Deep Research and Deep Research Max Agents Can Search the Web and Your Private Data**
 VentureBeat, April 2026
-[https://venturebeat.com/technology/googles-new-deep-research-and-deep-research-max-agents-can-search-the-web-and-your-private-data](https://venturebeat.com/technology/googles-new-deep-research-and-deep-research-max-agents-can-search-the-web-and-your-private-data)
+[Read →](https://venturebeat.com/technology/googles-new-deep-research-and-deep-research-max-agents-can-search-the-web-and-your-private-data)
 
 **The AI Research Landscape in 2026: From Agentic AI to Embodiment**
 Adaline Labs, January 2026
-[https://labs.adaline.ai/p/the-ai-research-landscape-in-2026](https://labs.adaline.ai/p/the-ai-research-landscape-in-2026)
+[Read →](https://labs.adaline.ai/p/the-ai-research-landscape-in-2026)
 
 **Deep|LLM 2026: From the Illusion of Model Development Stagnation to Large-Scale Real-World Agent Deployment**
 FundaAI Substack, January 2026
-[https://fundaai.substack.com/p/deepllm-2026-from-the-illusion-of](https://fundaai.substack.com/p/deepllm-2026-from-the-illusion-of)
+[Read →](https://fundaai.substack.com/p/deepllm-2026-from-the-illusion-of)
 
 **The Trends That Will Shape AI and Tech in 2026**
 IBM Think, March 2026
-[https://www.ibm.com/think/news/ai-tech-trends-predictions-2026](https://www.ibm.com/think/news/ai-tech-trends-predictions-2026)
+[Read →](https://www.ibm.com/think/news/ai-tech-trends-predictions-2026)
 
 **Health and Life Sciences in 2026: Data Earns Its Doctorate and AI Prescribes the Future of Care**
 SAS, December 2025
-[https://www.sas.com/en_us/news/press-releases/2025/december/health-life-sciences-2026-predictions.html](https://www.sas.com/en_us/news/press-releases/2025/december/health-life-sciences-2026-predictions.html)
+[Read →](https://www.sas.com/en_us/news/press-releases/2025/december/health-life-sciences-2026-predictions.html)
 
 **Best Deep Research AI Tools in 2026: Tested and Compared**
-Barie.ai, 2026 — *Source for the MIT hallucination confidence statistic*[https://barie.ai/blog/best-deep-research-ai-tools-in-2026-tested-and-compared/](https://barie.ai/blog/best-deep-research-ai-tools-in-2026-tested-and-compared/)
+Barie.ai, 2026
+[Read →](https://barie.ai/blog/best-deep-research-ai-tools-in-2026-tested-and-compared/)
 
 **AI Hallucination Statistics: Research Report 2026**
 Suprmind, 2026
-[https://suprmind.ai/hub/insights/ai-hallucination-statistics-research-report-2026/](https://suprmind.ai/hub/insights/ai-hallucination-statistics-research-report-2026/)
+[Read →](https://suprmind.ai/hub/insights/ai-hallucination-statistics-research-report-2026/)
 
 **Latest AI Research (Dec 2025): GPT-5, Agents & Trends**
 IntuitionLabs, December 2025
-[https://intuitionlabs.ai/articles/latest-ai-research-trends-2025](https://intuitionlabs.ai/articles/latest-ai-research-trends-2025)
+[Read →](https://intuitionlabs.ai/articles/latest-ai-research-trends-2025)
