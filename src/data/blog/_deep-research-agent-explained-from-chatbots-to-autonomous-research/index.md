@@ -68,7 +68,7 @@ The Deep Research Agent is the synthesis of three previously separate strands: (
 
 **Teaching AI to Think Before It Speaks**. Early language models were essentially advanced autocomplete: they quickly predicted plausible text, but often failed on hard problems because those require working through steps, not just pattern-matching. **LLMs** are trained to reason step-by-step before answering, checking their logic as they go so the final output is more reliable. Research is not a single-step problem. It requires planning ("what do I need to find out?"), evaluation ("is this source credible?"), synthesis ("how do these three conflicting studies fit together?"), and reflection ("have I missed anything important?"). Without genuine reasoning capability, an agent is just a fast Googler. With it, the agent can do the intellectual work of a researcher, not just the retrieval work.
 
-**Tool use**. A raw language model only knows what it learned during training. It cannot look anything up, run a calculation, or check whether something is still true today. **Tool use** lets an AI reach outside its own "mind" and interact with external systems such as a search engine, a calculator, a database, a web browser, or a code interpreter. The mechanism is surprisingly elegant. The LLM is told, in its system instructions, that certain tools exist, described in plain language. For example: *"You have access to a web_search function. Call it by writing `web_search("your query")` and you will receive results."* In 2023, tool use became a standard feature of frontier models, and the Model Context Protocol (MCP), standardised in 2024–2025, made it possible to plug virtually any data source or service into any agent in a universal, secure way.
+**Tool use**. A raw language model only knows what it learned during training. It cannot look anything up, run a calculation, or check whether something is still true today. **Tool use** lets an AI reach outside its own "mind" and interact with external systems such as a search engine, a calculator, a database, a web browser, or a code interpreter. The mechanism is surprisingly elegant. The LLM is told, in its system instructions, that certain tools exist, described in plain language. For example: *"You have access to a web_search function. Call it by writing `web_search('your query')` and you will receive results."* In 2023, tool use became a standard feature of frontier models, and the Model Context Protocol (MCP), standardised in 2024–2025, made it possible to plug virtually any data source or service into any agent in a universal, secure way.
 
 **Agentic AI system**. A standard AI interaction is a single exchange: you say something, it responds, and it is done. **Agentic AI** breaks this mold entirely. An agent is a system that pursues a *goal* over an extended sequence of actions. It plans what to do, takes an action, observes the result, updates its plan, and continues until the goal is achieved or it decides it cannot be. An agentic AI system does exactly this: it has a goal, it has tools to act on the world, and it has enough autonomy to choose its own sequence of steps.
 
@@ -91,7 +91,7 @@ Breaking open a Deep Research Agent reveals a sophisticated system of interconne
 
 ![The six core components of a Deep Research Agent and how they connect.](./images/deep_res_agent.png)
 
-### The Five Core Components
+### The Six Core Components
 
 1. **The Reasoning Brain (LLM Core)** — The central large language model that understands the query, makes decisions, generates plans, and synthesises final outputs. This is the "thinking" layer — typically a frontier model like GPT-4o, Gemini 3.1 Pro, or Claude Opus.
 2. **The Planner** — Breaks the original research question into a structured sequence of sub-tasks. Decides what needs to be found, in what order, and how findings from one step should inform the next. Can be static (pre-defined tree) or dynamic (adapts as new information arrives).
@@ -104,12 +104,12 @@ Breaking open a Deep Research Agent reveals a sophisticated system of interconne
 
 What makes Deep Research Agents fundamentally different from a single-turn AI response is the iterative research loop. Rather than answering immediately, the agent cycles through a process:
 
-- Receive query— understand what is being asked, including implicit sub-questions
-- Clarify & plan— optionally ask clarifying questions; decompose the query into a research plan
-- Execute step— use a tool (web search, code, database) to gather information for one sub-task
-- Reflect & update— evaluate what was found; update the research plan if needed
-- Loop or complete— return to step 3 until all sub-tasks are addressed, then synthesise
-- Synthesise & generate report— produce structured, cited output
+- Receive query — understand what is being asked, including implicit sub-questions
+- Clarify & plan — optionally ask clarifying questions; decompose the query into a research plan
+- Execute step — use a tool (web search, code, database) to gather information for one sub-task
+- Reflect & update — evaluate what was found; update the research plan if needed
+- Loop or complete — return to step 3 until all sub-tasks are addressed, then synthesise
+- Synthesise & generate report — produce structured, cited output
 
 A single research task may complete 10–50 of these loop cycles. OpenAI's Deep Research is known to run for 5–30 minutes on complex queries, executing dozens of searches in the background.
 
@@ -235,19 +235,21 @@ In regulated domains, treat outputs as *draft research* and require human expert
 
 ## Public Health: A Deep Dive Into Applications
 
-Public health may be the field where Deep Research Agents can deliver the most significant societal impact — and where the highest stakes demand the most careful deployment. It is a domain defined by vast complexity, time-sensitive decisions, heterogeneous data sources, and the ever-present imperative that errors cost lives.
+Public health may be one of the fields where Deep Research Agents can deliver the most significant societal impact — and where the highest stakes demand the most careful deployment. It is a domain defined by vast complexity, time-sensitive decisions, heterogeneous data sources, and the ever-present imperative that errors cost lives.
 
 In March 2026, the CDC published formal guidance for state, tribal, local, and territorial (STLT) public health agencies on how to use Deep Research tools — a landmark acknowledgment that these systems are now operational tools in the public health arsenal, not hypothetical future technologies.
 
 Public health is like trying to solve a jigsaw puzzle where the pieces are scattered across thousands of filing cabinets in different languages, some of the pieces are missing, and the final picture keeps changing. A Deep Research Agent doesn't solve the puzzle for you — but it can gather and sort the pieces dramatically faster than any human team could, leaving experts free to focus on the interpretive, judgmental work that actually requires human wisdom.
 
-The **AgentSLR** system(2026) demonstrates automated systematic literature reviews in epidemiology — extracting key parameters like basic reproduction numbers, serial intervals, and case-fatality ratios from published literature. What previously took a team of epidemiologists weeks to compile now takes hours. For emerging diseases like a novel influenza variant or the next coronavirus, that time compression is genuinely life-saving.
+The **AgentSLR** system (2026) demonstrates automated systematic literature reviews in epidemiology — extracting key parameters like basic reproduction numbers, serial intervals, and case-fatality ratios from published literature. What previously took a team of epidemiologists weeks to compile now takes hours. For emerging diseases like a novel influenza variant or the next coronavirus, that time compression is genuinely life-saving.
 
 ![Deep Research Agent applications in public health: from literature reviews to outbreak surveillance.](./images/public_health_hub.png)
 
 The CDC's own evaluation found Deep Research tools well-suited to tasks like: "Provide a summary of recent news articles highlighting outbreaks of infectious diseases within the United States, noting regions affected and the severity of each case, and explore local sentiment around each outbreak.”
 
-**The JMIR Assessment (March 2026)** A landmark paper in the *Journal of Medical Internet Research* concluded that deep research agents should be embraced as "assistive research tools rather than pseudoexperts." Their value lies in accelerating information gathering, not replacing rigorous human judgment. Realising their potential requires transparent retrieval architectures, robust benchmarking, and explicit educational integration to preserve clinicians' evaluative reasoning.
+### The JMIR Assessment (March 2026)
+
+A landmark paper in the *Journal of Medical Internet Research* concluded that deep research agents should be embraced as "assistive research tools rather than pseudoexperts." Their value lies in accelerating information gathering, not replacing rigorous human judgment. Realising their potential requires transparent retrieval architectures, robust benchmarking, and explicit educational integration to preserve clinicians' evaluative reasoning.
 
 ## Where This Is Going
 
@@ -275,7 +277,7 @@ Xu & Peng, Zhejiang University, arXiv, 2025
 [Read →](https://arxiv.org/abs/2506.12594)
 
 **Deep Research of Deep Research: From Transformer to Agent, From AI to AI for Science**
-arXiv, 2026
+Author(s) unlisted, arXiv, 2026
 [Read →](https://arxiv.org/abs/2603.28361)
 
 **DeepResearcher: Scaling Deep Research via Reinforcement Learning in Real-world Environments**
@@ -299,7 +301,7 @@ Zhan et al., arXiv, January 2026
 [Read →](https://arxiv.org/abs/2601.22984)
 
 **Rethinking the AI Scientist: Interactive Multi-Agent Workflows for Scientific Discovery**
-arXiv, 2026
+Author(s) unlisted, arXiv, 2026
 [Read →](https://arxiv.org/abs/2601.12542)
 
 **AgentSLR: Automating Systematic Literature Reviews in Epidemiology with Agentic AI**
