@@ -46,7 +46,7 @@
     </div>
 
     <ul
-      class="formkit-alert formkit-alert-error mt-3 hidden list-none text-sm text-red-500"
+      class="formkit-alert formkit-alert-error mt-3 list-none text-sm text-red-500"
       data-element="errors"
       data-group="alert"
     >
@@ -57,3 +57,35 @@
 </section>
 
 <script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
+
+<style>
+  /* Let ck.5.js control visibility — Tailwind hidden would block it */
+  .formkit-alert:empty { display: none; }
+
+  /* Spinner — hidden until ck.5.js sets data-active on the submit button */
+  .formkit-spinner { display: none; }
+  .formkit-submit[data-active] .formkit-spinner {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+  }
+  .formkit-submit[data-active] .formkit-spinner ~ span { display: none; }
+  .formkit-submit[data-active] { opacity: 0.75; cursor: wait; }
+
+  /* Spinner dots */
+  .formkit-spinner > div {
+    width: 6px;
+    height: 6px;
+    background-color: #fff;
+    border-radius: 50%;
+    animation: ck-bounce 1.4s infinite ease-in-out both;
+  }
+  .formkit-spinner > div:nth-child(1) { animation-delay: -0.32s; }
+  .formkit-spinner > div:nth-child(2) { animation-delay: -0.16s; }
+
+  @keyframes ck-bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40%           { transform: scale(1); }
+  }
+</style>
