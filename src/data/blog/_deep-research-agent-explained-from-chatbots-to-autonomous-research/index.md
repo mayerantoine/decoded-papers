@@ -2,7 +2,7 @@
 author: Mayer Antoine
 pubDatetime: 2026-05-22
 modDatetime: 2026-05-22
-title: "Deep Research Agents Explained: Architecture, Limitations, and Public Health Applications"
+title: "Deep Research Agents Explained: Architecture, Types, and Practical Applications"
 slug: deep-research-agents-explained-architecture-limitations-public-health-applications
 draft: false
 tags:
@@ -14,7 +14,7 @@ tags:
   - public health AI
   - AI research tools
   - autonomous agents
-description: Explains how Deep Research Agents work — from LLM reasoning and tool use to multi-agent architectures — and reviews their practical applications in public health and beyond, synthesising evidence from multiple systematic reviews.
+description: Explains how Deep Research Agents work — from LLM reasoning and tool use to multi-agent architectures — covering agent types, practical use cases, limitations, and responsible adoption, based on evidence from multiple systematic reviews.
 
 ---
 
@@ -30,7 +30,7 @@ A Google search gives you ten blue links. A basic AI chatbot gives you a confide
 
 That is what a Deep Research Agent does (at least, that is the ideal goal).
 
-After the coding agent, deep research has been one of the clearest and most impressive supported use cases of agentic generative AI. Adoption is still not clear, but the promise and potential of deep research are well supported in the literature, including reviews and reports.
+After the coding agent, deep research has been widely regarded as one of the clearest and most compelling use cases of agentic AI. In March 2026, the CDC published formal guidance for public health agencies on how to use these tools — a concrete signal that this technology has moved past proof-of-concept and into operational deployment.
 
 In this post, I will explore and explain how it works, along with its potential and promises, by synthesising evidence from multiple systematic reviews and surveys around deep research agents.
 
@@ -38,7 +38,7 @@ In this post, I will explore and explain how it works, along with its potential 
 
 1. What a Deep Research Agent is and how it differs from a chatbot or classic RAG system
 2. The three converging capabilities — reasoning, tool use, and agentic workflows — that made these agents possible
-3. The core architecture: the five components and the iterative research loop
+3. The core architecture: the six components and the iterative research loop
 4. The main agent types classified by workflow, data access, and composition
 5. Practical use cases across knowledge discovery, business intelligence, content research, and workflow automation
 6. Key challenges and limitations to know before deploying in high-stakes settings
@@ -52,6 +52,8 @@ In plain language, it is a chatbot that takes your question, breaks it down, and
 
 ### How it differs from a regular AI chatbot and Retrieval Augmented Generation (RAG)
 
+To understand what makes this different from tools you may already use, it helps to contrast it with two familiar alternatives: the standard AI chatbot and classic RAG.
+
 A standard AI chatbot mostly uses what it learned during training. Because of that, it usually cannot check new facts, verify calculations, or look up the latest information in real time. A **Deep Research Agent** can do those things by searching external sources, browsing pages, and using tools such as code, databases, and APIs. It can then repeat this process, step by step, to decide what to investigate next until it can answer your question.
 
 Modern chatbots (for example, newer versions of GPT models) can also use external tools like web search and can produce cited reports. This blurs the line between a “chatbot” and “deep research.” The key difference is workflow: general assistants can answer research questions, but Deep Research systems are built for long-horizon research orchestration, with more autonomy and tighter integration of specialized research tools (for example, literature search engines, citation managers, and statistical analysis packages).
@@ -62,7 +64,7 @@ Agentic RAG and Deep Research represent two distinct points on the same evolutio
 
 ![From AI Chatbot to Deep Research Agent: the spectrum of increasing autonomy and depth.](./images/rag_spectrum.png)
 
-### Background
+### The Three Enabling Capabilities
 
 The Deep Research Agent is the synthesis of three previously separate strands: (1) the reasoning power of large language models, (2) access to external information using tools, and (3) the workflow automation of multi-step agentic systems. The magic happens where all three converge.
 
@@ -170,9 +172,11 @@ The trade-off is depth. General agents lack specialised knowledge databases, dom
 
 These agents are fine-tuned or architecturally specialised for a particular field. Examples span biology (agents fine-tuned on genomics literature), law (agents with access to legal databases), finance (agents connected to Bloomberg, FactSet, SEC filings), and medical research (agents that understand clinical trial design, PICO frameworks, and statistical reporting).
 
+For public health specifically, the most relevant types are **hybrid agents** (combining open web with private surveillance data) and **domain-specific agents** (trained on epidemiological literature and clinical frameworks). The taxonomy above provides the vocabulary — the public health section below applies it.
+
 ## Practical Implications & Use Cases
 
-A useful way to organise these is around the *type of work* being automated — what the agent is fundamentally doing, not just where it is being used. Below is a reorganised and expanded framework across four domains.
+A useful way to organise these is around the *type of work* being automated — what the agent is fundamentally doing, not just where it is being used. Below is a reorganised and expanded framework across five categories.
 
 **I. Intelligent Knowledge Discovery.** Deep Research Agents are strongest when the core job is finding and synthesising scattered knowledge, especially across academic and grey literature. They can help run structured evidence workflows like systematic, scoping, and rapid reviews by searching widely, extracting key findings, and comparing results across studies. They can also support higher-level discovery by surfacing patterns, generating hypotheses, and mapping where evidence is missing.
 
@@ -235,13 +239,15 @@ In regulated domains, treat outputs as *draft research* and require human expert
 
 ## Public Health: A Deep Dive Into Applications
 
+These limitations do not diminish the opportunity — but they define the conditions for responsible adoption. Nowhere is that tension more consequential than in public health.
+
 Public health may be one of the fields where Deep Research Agents can deliver the most significant societal impact — and where the highest stakes demand the most careful deployment. It is a domain defined by vast complexity, time-sensitive decisions, heterogeneous data sources, and the ever-present imperative that errors cost lives.
 
 In March 2026, the CDC published formal guidance for state, tribal, local, and territorial (STLT) public health agencies on how to use Deep Research tools — a landmark acknowledgment that these systems are now operational tools in the public health arsenal, not hypothetical future technologies.
 
 Public health is like trying to solve a jigsaw puzzle where the pieces are scattered across thousands of filing cabinets in different languages, some of the pieces are missing, and the final picture keeps changing. A Deep Research Agent doesn't solve the puzzle for you — but it can gather and sort the pieces dramatically faster than any human team could, leaving experts free to focus on the interpretive, judgmental work that actually requires human wisdom.
 
-The **AgentSLR** system (2026) demonstrates automated systematic literature reviews in epidemiology — extracting key parameters like basic reproduction numbers, serial intervals, and case-fatality ratios from published literature. What previously took a team of epidemiologists weeks to compile now takes hours. For emerging diseases like a novel influenza variant or the next coronavirus, that time compression is genuinely life-saving.
+The **AgentSLR** system (2026) demonstrates automated systematic literature reviews in epidemiology — extracting key parameters like basic reproduction numbers, serial intervals, and case-fatality ratios from published literature. According to the authors, what previously took a team of epidemiologists weeks to compile now takes hours. For emerging diseases like a novel influenza variant or the next coronavirus, that time compression is genuinely life-saving.
 
 ![Deep Research Agent applications in public health: from literature reviews to outbreak surveillance.](./images/public_health_hub.png)
 
@@ -253,7 +259,7 @@ A landmark paper in the *Journal of Medical Internet Research* concluded that de
 
 ## Where This Is Going
 
-Deep Research Agents in 2026 are not the finished article — they are a rapidly maturing technology moving through its most consequential phase. The fundamental capabilities are proven. The trust, governance, and integration frameworks are still being built.
+Deep Research Agents in 2026 are not the finished article — they are a rapidly maturing technology moving through its most consequential phase. The fundamental capabilities are proven. The trust, governance, and integration frameworks are still being built. The CDC's March 2026 guidance — which specifies human review requirements, output validation steps, and acceptable use boundaries for STLT agencies — is an early example of what responsible institutional adoption looks like in practice.
 
 For public health in particular, the potential is exceptional. A field defined by resource constraints, information overload, and life-or-death decisions stands to benefit enormously from systems that can synthesise evidence at machine speed. The CDC's institutional embrace of these tools as legitimate operational aids is a significant signal: this technology is past proof-of-concept and into deployment.
 
