@@ -18,6 +18,8 @@ description: Explains how Deep Research Agents work — from LLM reasoning and t
 
 ---
 
+> **Disclosure:** This post was researched using Claude Deep Research. The content draws primarily from systematic review papers on Deep Research Agents, supplemented by the author's own analysis and opinions. All sources are cited in the References section.
+
 ## Table of contents
 
 ## Deep Research Agents
