@@ -3,7 +3,7 @@ author: Mayer Antoine
 pubDatetime: 2026-05-22
 modDatetime: 2026-05-22
 title: "Deep Research Agents Explained: Architecture, Types, and Practical Applications"
-slug: deep-research-agents-explained-architecture-limitations-public-health-applications
+slug: deep-research-agents-explained-architecture-types-practical-applications
 draft: false
 tags:
   - Deep Research Agent
@@ -14,7 +14,7 @@ tags:
   - public health AI
   - AI research tools
   - autonomous agents
-description: Explains how Deep Research Agents work — from LLM reasoning and tool use to multi-agent architectures — covering agent types, practical use cases, limitations, and responsible adoption, based on evidence from multiple systematic reviews.
+description: Decode how Deep Research Agents work — from LLM reasoning and tool use to multi-agent architectures — covering agent types, practical use cases, limitations, and responsible adoption, based on evidence from multiple systematic reviews.
 
 ---
 
