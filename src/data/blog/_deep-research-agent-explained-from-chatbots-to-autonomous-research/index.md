@@ -18,8 +18,6 @@ description: Decode how Deep Research Agents work — from LLM reasoning and too
 
 ---
 
-> **Disclosure:** This post was researched using Claude Deep Research. The content draws primarily from systematic review papers on Deep Research Agents, supplemented by the author's own analysis and opinions. All sources are cited in the References section.
-
 ## Table of contents
 
 ## Deep Research Agents
@@ -269,6 +267,8 @@ The agent gathers. The human decides. That partnership, properly structured, may
 
 **Final Thought**
 The Deep Research Agent is best understood not as artificial intelligence replacing human intelligence, but as a new kind of research infrastructure — like the library, or the internet, or the scientific journal — that expands the range of questions that humans can pursue and the speed at which they can pursue them. The questions themselves, and what to do with the answers, remain irreducibly human.
+
+> **Disclosure:** This post was researched using Claude Deep Research. The content draws primarily from systematic review papers on Deep Research Agents, supplemented by the author's own analysis and opinions. All sources are cited in the References section.
 
 ## References
 
