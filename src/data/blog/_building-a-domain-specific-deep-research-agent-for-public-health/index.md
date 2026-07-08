@@ -1,7 +1,7 @@
 ---
 author: Mayer Antoine
-pubDatetime: 2026-07-03
-modDatetime: 2026-07-03
+pubDatetime: 2026-07-08
+modDatetime: 2026-07-08
 title: Building a Domain-Specific Deep Research Agent for Public Health
 slug: building-a-domain-specific-deep-research-agent-for-public-health
 tags:
@@ -56,6 +56,8 @@ The framing I keep coming back to:
 
 What makes this architecture different from the one-shot pattern most deep research agents follow: it is built around explicit evaluation loops and a dedicated, gated memory layer, rather than a single pass from retrieval through writing. It separates intent refinement and outline planning into interactive, human-validated stages instead of collapsing them into the same synthesis call. And it writes section by section from verified memory — no subagents, no parallel section workflows, at least not yet.
 
+For now, the "public health" in the name is carried by three concrete choices: (1) an allow-listed source registry (MMWR, EID, PCD, PubMed, WHO), (2) source-type inference that tags each URL with its public-health category, and (3) a structured question frame in the Intent Agent tuned to public-health research shapes. That is a starting point, not a domain model — future work will layer a dedicated public-health knowledge layer across all agents (guideline hierarchies, surveillance cadence, population and comparator conventions) rather than expressing domain expertise only through allow-lists and prompt scaffolding.
+
 In this post, I describe 'Phase 0' of my design for a deep research agent architecture, 'Epi2report', inspired by Mind2Report. The code is open source at [github.com/mayerantoine/epi2report](https://github.com/mayerantoine/epi2report).
 
 ## What works, what doesn't
@@ -72,11 +74,20 @@ What exists today:
 What does not exist yet:
 
 - No formal eval suite or observability dashboard.
-- No benchmark or any other baseline.
+- No benchmarks or baselines.
 - No structured regression tests around the agent workflow itself.
 - Reproducibility is partial, achievable from saved artifacts. To move from "partial" to "strong" reproducibility, I need snapshot-based source caching (Mind2Report's approach).
 
 Phase 0 was about proving the orchestration pattern could run locally and produce structured, inspectable artifacts. Phase 1 is about measuring whether it actually works well. This post is an honest description of the first, not a claim about the second.
+
+Here is what a run looks like end to end — from raw question through intent refinement, outline negotiation, per-section research, and final synthesis:
+
+<video autoplay muted loop playsinline preload="metadata"
+       poster="/assets/epi2report/epi2report_test_1_poster.png"
+       style="width:100%;max-width:900px;border-radius:6px;display:block;margin:1rem auto;">
+  <source src="/assets/epi2report/epi2report_test_1.mp4" type="video/mp4">
+  Your browser does not support embedded video. <a href="/assets/epi2report/epi2report_test_1.mp4">Download the demo.</a>
+</video>
 
 ## High-level architecture
 The pipeline is deliberately linear. Four phases, four human checkpoints:
