@@ -26,6 +26,7 @@ RAG evaluation datasets, public health AI applications.
 - [Agentic RAG with OpenAI Agents SDK](https://decodedpapers.com/posts/evidencefirst-ai-implementing-agentic-rag-with-openai-agents-sdk): Evidence-first agentic RAG implementation reproducing the pattern from recent research using OpenAI's Agent SDK.
 - [Lessons Learned from Implementing a Multi-Agent Conversational Recommender System (MACRS)](https://decodedpapers.com/posts/lessons-learned-multi-agent-conversational-recommender-system): Implements MACRS using the OpenAI Agents SDK — hub-and-spoke planning, parallel agent execution, and reflection loops for self-correcting conversational recommendations.
 - [Deep Research Agents Explained: Architecture, Types, and Practical Applications](https://decodedpapers.com/posts/deep-research-agents-explained-architecture-types-practical-applications): Decode how Deep Research Agents work — from LLM reasoning and tool use to multi-agent architectures — covering agent types, practical use cases, limitations, and responsible adoption, based on evidence from multiple systematic reviews.
+- [Building a Domain-Specific Deep Research Agent for Public Health](https://decodedpapers.com/posts/building-a-domain-specific-deep-research-agent-for-public-health): Phase 0 of Epi2report — a multi-agent pipeline for public health evidence synthesis with intent refinement, gated memory, and source-level citations using Claude and Anthropic's tool-use API.
 
 ## Author
 
