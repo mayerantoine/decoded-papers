@@ -10,6 +10,7 @@ import ShareLinks from "@/components/ShareLinks.astro";
 import BackButton from "@/components/BackButton.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
 import NewsletterSignup from "@/components/NewsletterSignup.astro";
+import NewsletterInlineCTA from "@/components/NewsletterInlineCTA.astro";
 import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
@@ -119,6 +120,8 @@ const nextPost =
     >
       <Content />
     </article>
+
+    <NewsletterInlineCTA />
 
     <NewsletterSignup />
 
@@ -329,4 +332,35 @@ const nextPost =
 
   initTocScrollSpy();
   document.addEventListener("astro:after-swap", initTocScrollSpy);
+
+  /** Insert the inline newsletter CTA roughly mid-post for long articles.
+   *  Skips short posts (fewer than 3 h2 headings or under ~1500 words). */
+  function placeInlineNewsletterCta() {
+    const cta = document.getElementById("inline-newsletter-cta");
+    const article = document.getElementById("article");
+    if (!cta || !article) return;
+
+    const wordCount = (article.textContent || "").trim().split(/\s+/).length;
+    const h2s = Array.from(article.querySelectorAll("h2"));
+
+    if (wordCount < 1500 || h2s.length < 3) return;
+
+    const targetHeading = h2s[Math.floor(h2s.length / 2)];
+    if (!targetHeading) return;
+
+    // Walk forward to the last sibling before the next h2, so the CTA lands
+    // at the end of a section rather than splitting one open.
+    let insertAfter = targetHeading;
+    let next = targetHeading.nextElementSibling;
+    while (next && next.tagName !== "H2") {
+      insertAfter = next;
+      next = next.nextElementSibling;
+    }
+
+    insertAfter.after(cta);
+    cta.removeAttribute("data-cta-hidden");
+  }
+
+  placeInlineNewsletterCta();
+  document.addEventListener("astro:after-swap", placeInlineNewsletterCta);
 </script>

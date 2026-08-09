@@ -1,0 +1,95 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Card from "@/components/Card.astro";
+import Hr from "@/components/Hr.astro";
+import NewsletterSignup from "@/components/NewsletterSignup.astro";
+import getSortedPosts from "@/utils/getSortedPosts";
+
+const posts = await getCollection("blog");
+const recentPosts = getSortedPosts(posts).slice(0, 3);
+---
+
+<Layout
+  title="Subscribe to The Decoded Dispatch | DecodedPapers"
+  description="Bi-weekly decoded AI papers and implementation notes for AI engineering — working code, honest tradeoffs, and real datasets from a practitioner applying recent AI/ML research."
+>
+  <Header />
+  <main
+    id="main-content"
+    class="mx-auto w-full max-w-app px-4 pt-10 pb-12"
+  >
+    <section class="pb-8">
+      <h1 class="font-serif text-3xl font-bold text-foreground sm:text-4xl">
+        Bi-weekly decoded AI papers and implementation notes for AI engineering.
+      </h1>
+      <p class="mt-4 text-base leading-relaxed opacity-80 sm:text-lg">
+        Working code, honest tradeoffs, and real datasets — from a practitioner
+        applying recent AI/ML research under the same constraints you face.
+      </p>
+    </section>
+
+    <section class="pb-8">
+      <h2 class="font-serif text-xl font-semibold text-foreground">
+        What you'll get
+      </h2>
+      <ul class="mt-3 space-y-2 text-sm leading-relaxed opacity-85 sm:text-base">
+        <li>— AI papers decoded with practical insights</li>
+        <li>— New paper implementations you can actually run</li>
+        <li>— The decisions, adaptations, and tradeoffs behind each one</li>
+        <li>— Tools that worked (and the ones that didn't)</li>
+        <li>— Links to notebooks and repos, always</li>
+      </ul>
+    </section>
+
+    <section class="pb-2">
+      <h2 class="font-serif text-xl font-semibold text-foreground">
+        Who this is for
+      </h2>
+      <p class="mt-3 text-sm leading-relaxed opacity-85 sm:text-base">
+        Practitioners applying AI in public health, data science, and adjacent
+        fields — building real systems with standard tools and modest compute,
+        under the same constraints most teams actually face.
+      </p>
+    </section>
+
+    <NewsletterSignup />
+
+    <Hr />
+
+    <section class="py-8">
+      <h2 class="font-serif text-xl font-semibold text-foreground">
+        About the author
+      </h2>
+      <p class="mt-3 text-sm leading-relaxed opacity-85 sm:text-base">
+        I'm Mayer Antoine. DecodedPapers documents how I take architectures and
+        techniques from recent AI/ML papers, implement them on real datasets,
+        and adapt them to solve practical problems. Every post is a working
+        implementation with documented decisions, adaptations, and tradeoffs —
+        something you can run, customize, and carry into your own work.
+      </p>
+    </section>
+
+    <Hr />
+
+    {
+      recentPosts.length > 0 && (
+        <section class="py-8">
+          <h2 class="font-serif text-xl font-semibold text-foreground">
+            Recent issues
+          </h2>
+          <ul>
+            {recentPosts.map(data => (
+              <Card variant="h3" {...data} />
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <NewsletterSignup />
+  </main>
+  <Footer />
+</Layout>
