@@ -6,13 +6,8 @@ title: "Multi-Agent Conversational Recommender System: Agentic Patterns with Ope
 slug: lessons-learned-multi-agent-conversational-recommender-system
 draft: False
 tags:
-  - multi-agent
-  - Agent
-  - OpenAI Agents SDK
-  - conversational recommendation
-  - agentic patterns
-  - reflection loop
-  - recommender system
+  - Agents
+  - Multi-Agent
   - Python
 description: Build a multi-agent conversational recommender system using agentic design patterns — hub-and-spoke orchestration, parallel agent execution, and reflection loops with the OpenAI Agents SDK.
 ---

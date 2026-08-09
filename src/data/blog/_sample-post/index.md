@@ -6,8 +6,8 @@ title: Title of the post
 slug: title-of-the-post
 draft: True
 tags:
-  - Retrieval-augmented generation(RAG)
-  - Agent
+  - RAG
+  - Agents
 description: Test post
 ---
 

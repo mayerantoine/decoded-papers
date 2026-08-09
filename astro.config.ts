@@ -11,9 +11,51 @@ import {
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import { SITE } from "./src/config";
 
+// Tags were consolidated to a controlled vocabulary (RAG, Agents, Multi-Agent,
+// Evaluation, Deep Research, Public Health AI, Python). These map the retired
+// tag slugs onto their closest surviving tag so old links don't 404.
+const tagRedirects = Object.fromEntries(
+  Object.entries({
+    "agentic-ai": "agents",
+    agent: "agents",
+    "autonomous-agents": "agents",
+    "agentic-patterns": "agents",
+    "reflection-loop": "agents",
+    "open-ai-agents-sdk": "agents",
+    "re-act": "agents",
+    anthropic: "agents",
+    claude: "agents",
+    llm: "agents",
+    "deep-research-agent": "deep-research",
+    "ai-research-tools": "deep-research",
+    "evidence-synthesis": "deep-research",
+    "rag-evaluation": "evaluation",
+    "evaluation-dataset": "evaluation",
+    ragas: "evaluation",
+    "context-precision": "evaluation",
+    faithfulness: "evaluation",
+    "pub-med-qa": "evaluation",
+    "medical-ai": "public-health-ai",
+    "retrieval-augmented-generation-rag": "rag",
+    "multi-document-summarization": "rag",
+    "hybrid-retrieval": "rag",
+    "chroma-db": "rag",
+    "col-bert": "rag",
+    "bm-25": "rag",
+    specter: "rag",
+    "x-sum": "rag",
+    "lit-llm": "rag",
+    "paper-qa": "rag",
+    "debate-prompting": "rag",
+    "conversational-recommendation": "agents",
+    "recommender-system": "agents",
+  }).map(([from, to]) => [`/tags/${from}`, `/tags/${to}`])
+);
+
 // https://astro.build/config
 export default defineConfig({
   site: SITE.website,
+  redirects: tagRedirects,
   integrations: [
     sitemap({
       filter: page => SITE.showArchives || !page.endsWith("/archives"),

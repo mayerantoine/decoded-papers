@@ -5,13 +5,7 @@ modDatetime: 2026-04-04
 title: "Multi-Document Summarization with RAG: Hybrid Retrieval, Debate Prompting, and SPECTER"
 slug: a-practitioner-guide-to-multi-document-summarization-with-rag-ask-retrieve-relate-summarize
 tags:
-  - Multi-document Summarization
   - RAG
-  - X-Sum
-  - hybrid retrieval
-  - ColBERT
-  - debate prompting
-  - SPECTER
   - Python
 description: Implement multi-document summarization using RAG and hybrid retrieval (ChromaDB + ColBERT) — debate prompting, SPECTER embeddings, and working Python code based on the X-Sum framework.
 ---

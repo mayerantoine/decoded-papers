@@ -5,15 +5,11 @@ modDatetime: 2026-07-08
 title: Building a Domain-Specific Deep Research Agent for Public Health
 slug: building-a-domain-specific-deep-research-agent-for-public-health
 tags:
-  - Python
-  - Agent
-  - multi-agent
+  - Agents
+  - Multi-Agent
   - Deep Research
-  - Anthropic
-  - Claude
-  - public health AI
-  - evidence synthesis
-  - RAG
+  - Public Health AI
+  - Python
 description: Build a domain-specific multi-agent deep research system for public health evidence synthesis — with intent refinement, outline negotiation, gated memory, and source-level citations using Claude and Anthropic's tool-use API.
 draft: False
 ---

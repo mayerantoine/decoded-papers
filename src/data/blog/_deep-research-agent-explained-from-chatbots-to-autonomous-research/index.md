@@ -6,14 +6,11 @@ title: "Deep Research Agents Explained: Architecture, Types, and Practical Appli
 slug: deep-research-agents-explained-architecture-types-practical-applications
 draft: false
 tags:
-  - Deep Research Agent
-  - Agentic AI
+  - Agents
+  - Multi-Agent
+  - Deep Research
   - RAG
-  - LLM
-  - multi-agent
-  - public health AI
-  - AI research tools
-  - autonomous agents
+  - Public Health AI
 description: Decode how Deep Research Agents work — from LLM reasoning and tool use to multi-agent architectures — covering agent types, practical use cases, limitations, and responsible adoption, based on evidence from multiple systematic reviews.
 
 ---

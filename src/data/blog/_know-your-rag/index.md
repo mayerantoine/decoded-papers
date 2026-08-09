@@ -7,12 +7,8 @@ slug: know-your-rag-building-eval-dataset-for-public-health-rag-systems
 draft: False
 tags:
   - RAG
-  - RAG evaluation
-  - Evaluation Dataset
-  - RAGAS
-  - ChromaDB
-  - multi-agent
-  - public health AI
+  - Evaluation
+  - Public Health AI
   - Python
 description: Build a domain-specific RAG evaluation dataset from public health literature using the Know Your RAG framework — LLM-generated questions, critique filtering, and RAGAS benchmarking of Agentic vs Naive RAG pipelines.
 ---

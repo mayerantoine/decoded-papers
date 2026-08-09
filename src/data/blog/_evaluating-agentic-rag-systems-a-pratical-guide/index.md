@@ -5,15 +5,10 @@ modDatetime: 2025-10-14
 title: Evaluating Agentic RAG Systems - A Practical Guide with PubMedQA
 slug: evaluating-agentic-rag-systems-a-pratical-guide
 tags:
-  - Agent
   - RAG
-  - RAGAS
-  - PubMedQA
-  - RAG evaluation
-  - context precision
-  - faithfulness
-  - ChromaDB
-  - medical AI
+  - Agents
+  - Evaluation
+  - Public Health AI
 description: Practical guide to evaluating agentic RAG on PubMedQA using RAGAS — covering context precision, faithfulness, answer correctness, and exact match with ChromaDB vector store.
 
 ---
